@@ -1,0 +1,2336 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D-ONE — Sống trọn vẹn mỗi ngày</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════ */
+:root {
+  --ivory:       #F2EDE4;
+  --ivory-light: #F8F5F0;
+  --white:       #FFFFFF;
+  --forest:      #1C3426;
+  --forest-mid:  #2A4A36;
+  --amber:       #C4813A;
+  --amber-light: #D9924A;
+  --amber-pale:  #FDF3E7;
+  --green:       #4A7C59;
+  --green-pale:  #EDF5F0;
+  --ink:         #2C2416;
+  --ink-soft:    #6B5F50;
+  --ink-muted:   #9C8F80;
+  --border:      rgba(44,36,22,0.10);
+  --border-soft: rgba(44,36,22,0.06);
+  --sidebar-w:   240px;
+  --font-d: 'Playfair Display', Georgia, serif;
+  --font-b: 'Inter', system-ui, sans-serif;
+  --r-sm:4px; --r-md:10px; --r-lg:14px; --r-xl:18px;
+  --shadow-sm: 0 2px 12px rgba(44,36,22,0.06);
+  --shadow-md: 0 4px 24px rgba(44,36,22,0.10);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+body{background:var(--ivory-light);color:var(--ink);font-family:var(--font-b);line-height:1.6;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;font-family:inherit}
+ul{list-style:none}
+
+/* ═══════════════════════════════════
+   PAGES
+═══════════════════════════════════ */
+.page{display:none;min-height:100vh}
+.page.active{display:block}
+
+/* ═══════════════════════════════════
+   BUTTONS
+═══════════════════════════════════ */
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--forest);color:white;font-size:14px;font-weight:600;padding:12px 24px;border-radius:var(--r-lg);border:none;cursor:pointer;transition:all .2s}
+.btn-primary:hover{background:var(--forest-mid);transform:translateY(-1px)}
+.btn-amber{display:inline-flex;align-items:center;gap:8px;background:var(--amber);color:white;font-size:14px;font-weight:600;padding:12px 24px;border-radius:var(--r-lg);border:none;cursor:pointer;transition:all .2s}
+.btn-amber:hover{background:var(--amber-light);transform:translateY(-1px)}
+.btn-ghost{display:inline-flex;align-items:center;gap:6px;background:transparent;color:var(--ink-soft);font-size:13px;font-weight:500;padding:10px 16px;border-radius:var(--r-md);border:1.5px solid var(--border);cursor:pointer;transition:all .2s}
+.btn-ghost:hover{border-color:var(--ink-soft);color:var(--ink)}
+.btn-text{background:none;border:none;color:var(--amber);font-size:13px;font-weight:600;cursor:pointer;padding:0}
+
+/* ═══════════════════════════════════
+   ONBOARDING PAGES
+═══════════════════════════════════ */
+.auth-layout{min-height:100vh;display:grid;grid-template-columns:1fr 1fr}
+.auth-left{background:var(--forest);padding:60px 56px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+.auth-left::before{content:'';position:absolute;right:-80px;bottom:-80px;width:400px;height:400px;background:radial-gradient(circle,rgba(196,129,58,.15) 0%,transparent 70%);pointer-events:none}
+.auth-logo{font-family:var(--font-d);font-size:26px;font-weight:600;color:white;letter-spacing:-.3px}
+.auth-logo em{font-style:italic;color:var(--amber)}
+.auth-tagline{font-family:var(--font-d);font-size:clamp(28px,3vw,40px);font-weight:600;color:white;line-height:1.2;margin-bottom:16px}
+.auth-tagline em{font-style:italic;color:var(--amber)}
+.auth-sub{font-size:15px;color:rgba(255,255,255,.6);line-height:1.7;max-width:360px}
+.auth-pillars{display:flex;flex-direction:column;gap:12px;margin-top:40px}
+.auth-pillar{display:flex;align-items:center;gap:12px;padding:14px 18px;background:rgba(255,255,255,.07);border-radius:var(--r-lg);border:1px solid rgba(255,255,255,.1)}
+.auth-pillar-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.auth-pillar-dot.k{background:var(--green)}
+.auth-pillar-dot.g{background:var(--amber)}
+.auth-pillar-dot.a{background:#6B9AB8}
+.auth-pillar-text{font-size:13px;color:rgba(255,255,255,.75)}
+.auth-right{background:var(--white);padding:60px 56px;display:flex;flex-direction:column;justify-content:center}
+.auth-form-wrap{max-width:380px;width:100%}
+.auth-step-label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:8px}
+.auth-title{font-family:var(--font-d);font-size:28px;font-weight:600;color:var(--forest);margin-bottom:6px}
+.auth-desc{font-size:14px;color:var(--ink-soft);margin-bottom:28px;line-height:1.6}
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-size:12px;font-weight:600;color:var(--forest);margin-bottom:6px;letter-spacing:.03em;text-transform:uppercase}
+.form-input{width:100%;border:1.5px solid var(--border);border-radius:var(--r-md);padding:12px 16px;font-size:14px;font-family:inherit;color:var(--ink);background:var(--ivory-light);transition:all .2s}
+.form-input:focus{outline:none;border-color:var(--amber);background:white;box-shadow:0 0 0 3px rgba(196,129,58,.1)}
+.form-input::placeholder{color:var(--ink-muted)}
+.form-submit{width:100%;background:var(--forest);color:white;font-size:15px;font-weight:600;padding:14px;border-radius:var(--r-lg);border:none;cursor:pointer;margin-top:8px;transition:background .2s}
+.form-submit:hover{background:var(--forest-mid)}
+.form-divider{display:flex;align-items:center;gap:12px;margin:16px 0;font-size:12px;color:var(--ink-muted)}
+.form-divider::before,.form-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.form-note{font-size:12px;color:var(--ink-muted);text-align:center;margin-top:12px}
+.form-note a{color:var(--amber);font-weight:500;cursor:pointer}
+.auth-tabs{display:flex;border-bottom:2px solid var(--border);margin-bottom:24px;gap:0}
+.auth-tab{flex:1;text-align:center;font-size:14px;font-weight:500;padding:10px;cursor:pointer;color:var(--ink-soft);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s}
+.auth-tab.active{color:var(--forest);font-weight:700;border-bottom-color:var(--amber)}
+
+/* OTP inputs */
+.otp-row{display:flex;gap:10px;justify-content:center;margin:20px 0}
+.otp-input{width:52px;height:56px;text-align:center;font-size:22px;font-weight:700;border:2px solid var(--border);border-radius:var(--r-md);background:var(--ivory-light);color:var(--forest);transition:all .2s}
+.otp-input:focus{outline:none;border-color:var(--amber);background:white}
+.otp-resend{text-align:center;font-size:12px;color:var(--ink-muted);margin-top:12px}
+.otp-resend a{color:var(--amber);cursor:pointer;font-weight:500}
+
+/* Method toggle */
+.method-toggle{display:flex;gap:8px;margin-bottom:20px;background:var(--ivory-light);border-radius:var(--r-md);padding:4px}
+.method-btn{flex:1;text-align:center;font-size:13px;font-weight:500;padding:8px;border-radius:var(--r-sm);border:none;background:transparent;cursor:pointer;color:var(--ink-soft);transition:all .2s}
+.method-btn.active{background:white;color:var(--forest);font-weight:600;box-shadow:var(--shadow-sm)}
+
+/* Progress indicator */
+.onboard-progress{display:flex;gap:6px;margin-bottom:28px}
+.onboard-step{flex:1;height:3px;border-radius:3px;background:var(--border)}
+.onboard-step.done{background:var(--amber)}
+.onboard-step.active{background:var(--amber);opacity:.5}
+
+/* ═══════════════════════════════════
+   NRX SURVEY
+═══════════════════════════════════ */
+.nrx-layout{min-height:100vh;background:var(--forest);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px}
+.nrx-wrap{width:100%;max-width:580px}
+.nrx-header{text-align:center;margin-bottom:32px}
+.nrx-logo{font-family:var(--font-d);font-size:20px;font-weight:600;color:white;margin-bottom:20px}
+.nrx-logo em{font-style:italic;color:var(--amber)}
+.nrx-prog-bar{height:3px;background:rgba(255,255,255,.12);border-radius:3px;margin-bottom:6px}
+.nrx-prog-fill{height:100%;background:var(--amber);border-radius:3px;transition:width .4s ease}
+.nrx-prog-label{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.4);margin-bottom:28px}
+.nrx-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:36px}
+.nrx-q-num{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:10px}
+.nrx-q{font-family:var(--font-d);font-size:22px;font-weight:600;color:white;line-height:1.35;margin-bottom:24px}
+.nrx-opts{display:flex;flex-direction:column;gap:10px}
+.nrx-opt{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:var(--r-lg);border:1.5px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);cursor:pointer;transition:all .2s;text-align:left;width:100%}
+.nrx-opt:hover{border-color:var(--amber);background:rgba(196,129,58,.1)}
+.nrx-opt.selected{border-color:var(--amber);background:rgba(196,129,58,.18)}
+.nrx-opt-icon{font-size:20px;flex-shrink:0;width:28px;text-align:center}
+.nrx-opt-text{font-size:14px;color:white;line-height:1.45}
+.nrx-nav{display:flex;justify-content:space-between;align-items:center;margin-top:20px}
+.nrx-skip{font-size:13px;color:rgba(255,255,255,.4);background:none;border:none;cursor:pointer;transition:color .2s}
+.nrx-skip:hover{color:rgba(255,255,255,.7)}
+.nrx-next{font-size:14px;font-weight:600;background:var(--amber);color:white;border:none;padding:12px 28px;border-radius:var(--r-lg);cursor:pointer;transition:all .2s}
+.nrx-next:hover{background:var(--amber-light)}
+.nrx-next:disabled{opacity:.35;cursor:not-allowed}
+.nrx-back{font-size:13px;color:rgba(255,255,255,.4);background:none;border:none;cursor:pointer}
+.nrx-back:hover{color:rgba(255,255,255,.7)}
+
+/* NRX Skip confirm */
+.nrx-skip-banner{background:rgba(196,129,58,.15);border:1px solid rgba(196,129,58,.3);border-radius:var(--r-lg);padding:16px 20px;margin-top:16px;display:none}
+.nrx-skip-banner.show{display:block}
+.nrx-skip-text{font-size:13px;color:rgba(255,255,255,.7);margin-bottom:10px}
+.nrx-skip-actions{display:flex;gap:8px}
+.nrx-skip-confirm{font-size:12px;font-weight:600;background:rgba(255,255,255,.1);color:white;border:1px solid rgba(255,255,255,.2);padding:7px 14px;border-radius:var(--r-sm);cursor:pointer}
+.nrx-skip-cancel{font-size:12px;font-weight:600;background:var(--amber);color:white;border:none;padding:7px 14px;border-radius:var(--r-sm);cursor:pointer}
+
+/* ═══════════════════════════════════
+   DASHBOARD LAYOUT
+═══════════════════════════════════ */
+.app-layout{display:grid;grid-template-columns:var(--sidebar-w) 1fr;min-height:100vh}
+
+/* Sidebar */
+.sidebar{background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar-head{padding:20px 20px 16px;border-bottom:1px solid var(--border)}
+.sidebar-logo{font-family:var(--font-d);font-size:20px;font-weight:600;color:var(--forest);cursor:pointer}
+.sidebar-logo em{font-style:italic;color:var(--amber)}
+.sidebar-user{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.sidebar-av{width:36px;height:36px;border-radius:50%;background:var(--amber);color:white;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sidebar-user-info{}
+.sidebar-user-name{font-size:13px;font-weight:600;color:var(--forest)}
+.sidebar-user-badge{font-size:10px;color:var(--ink-muted)}
+/* Profile completion bar */
+.profile-completion{padding:12px 20px;border-bottom:1px solid var(--border);background:var(--ivory-light)}
+.profile-completion-label{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-muted);margin-bottom:6px}
+.profile-completion-label span:last-child{font-weight:700;color:var(--amber)}
+.profile-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.profile-bar-fill{height:100%;background:var(--amber);border-radius:2px;transition:width .6s ease}
+.profile-complete-tip{font-size:11px;color:var(--ink-muted);margin-top:5px}
+.profile-complete-tip a{color:var(--amber);cursor:pointer;font-weight:500}
+/* Nav items */
+.sidebar-nav{flex:1;padding:8px 0}
+.nav-section-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);padding:12px 20px 4px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 20px;font-size:13px;font-weight:500;color:var(--ink-soft);cursor:pointer;border-left:3px solid transparent;transition:all .15s;border-radius:0}
+.nav-item:hover{background:var(--ivory-light);color:var(--forest)}
+.nav-item.active{color:var(--forest);background:var(--amber-pale);border-left-color:var(--amber);font-weight:600}
+.nav-item-icon{font-size:15px;flex-shrink:0;width:20px;text-align:center}
+.nav-item-badge{margin-left:auto;background:var(--amber);color:white;font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px}
+/* Sidebar footer */
+.sidebar-footer{padding:12px 20px;border-top:1px solid var(--border)}
+.sidebar-logout{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-muted);cursor:pointer;padding:8px 0;transition:color .2s;background:none;border:none;width:100%;text-align:left}
+.sidebar-logout:hover{color:#e05050}
+
+/* Main content */
+.main-content{background:var(--ivory-light);overflow-y:auto}
+
+/* Tab panels */
+.tab-panel{display:none;padding:32px}
+.tab-panel.active{display:block}
+.tab-header{margin-bottom:28px}
+.tab-title{font-family:var(--font-d);font-size:24px;font-weight:600;color:var(--forest);margin-bottom:4px}
+.tab-subtitle{font-size:14px;color:var(--ink-soft)}
+
+/* ═══════════════════════════════════
+   WIDGETS / CARDS
+═══════════════════════════════════ */
+.widget{background:var(--white);border-radius:var(--r-xl);border:1px solid var(--border);padding:22px}
+.widget-title{font-size:13px;font-weight:700;color:var(--forest);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.widget-title-link{font-size:11px;font-weight:500;color:var(--amber);cursor:pointer}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+
+/* NRX Score cards */
+.score-card{background:var(--white);border-radius:var(--r-lg);border:1px solid var(--border);padding:18px}
+.score-card-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;display:flex;align-items:center;justify-content:space-between}
+.score-card-label.k{color:var(--green)}
+.score-card-label.g{color:var(--amber)}
+.score-card-label.a{color:#6B9AB8}
+.score-badge{font-size:9px;padding:2px 7px;border-radius:10px;font-weight:600}
+.score-badge.good{background:rgba(74,124,89,.12);color:var(--green)}
+.score-badge.warn{background:rgba(196,129,58,.12);color:var(--amber)}
+.score-num{font-family:var(--font-d);font-size:36px;font-weight:700;color:var(--forest);line-height:1;margin-bottom:6px}
+.score-bar{height:4px;background:var(--border-soft);border-radius:2px;margin-bottom:5px;overflow:hidden}
+.score-bar-fill{height:100%;border-radius:2px}
+.score-desc{font-size:11px;color:var(--ink-muted);line-height:1.5}
+
+/* NRX reminder */
+.nrx-reminder{background:linear-gradient(135deg,var(--forest),var(--forest-mid));border-radius:var(--r-xl);padding:20px 24px;display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.nrx-reminder-text{flex:1}
+.nrx-reminder-title{font-size:14px;font-weight:700;color:white;margin-bottom:3px}
+.nrx-reminder-sub{font-size:12px;color:rgba(255,255,255,.6)}
+.nrx-reminder-btn{font-size:12px;font-weight:600;background:var(--amber);color:white;border:none;padding:9px 16px;border-radius:var(--r-md);cursor:pointer;white-space:nowrap}
+
+/* Mission checklist */
+.mission-list{display:flex;flex-direction:column;gap:8px}
+.mission-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--ivory-light);border-radius:var(--r-md);cursor:pointer;transition:background .15s}
+.mission-item:hover{background:var(--border-soft)}
+.mission-check{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.mission-check.done{background:var(--green);border-color:var(--green)}
+.mission-check.done::after{content:'✓';color:white;font-size:11px;font-weight:700}
+.mission-text{font-size:13px;color:var(--ink-soft);flex:1}
+.mission-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px}
+.mission-tag.k{background:rgba(74,124,89,.12);color:var(--green)}
+.mission-tag.g{background:rgba(196,129,58,.12);color:var(--amber)}
+.mission-tag.a{background:rgba(107,154,184,.12);color:#6B9AB8}
+
+/* CA card */
+.ca-card{display:flex;gap:14px;align-items:flex-start}
+.ca-av{width:44px;height:44px;border-radius:50%;background:var(--amber);color:white;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ca-info-name{font-size:14px;font-weight:700;color:var(--forest);margin-bottom:2px}
+.ca-info-role{font-size:11px;color:var(--ink-muted);margin-bottom:8px}
+.ca-online{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--green);font-weight:600}
+.ca-online::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);display:block}
+.ca-actions{display:flex;gap:6px;margin-top:10px}
+.btn-ca{font-size:11px;font-weight:600;padding:6px 12px;border-radius:var(--r-sm);cursor:pointer;transition:all .2s}
+.btn-ca.msg{background:var(--forest);color:white;border:none}
+.btn-ca.book{background:transparent;color:var(--forest);border:1.5px solid var(--border)}
+.btn-ca.book:hover{border-color:var(--forest)}
+
+/* Event cards */
+.event-item{border:1px solid var(--border);border-radius:var(--r-lg);padding:14px;margin-bottom:10px;display:flex;gap:14px;align-items:flex-start;transition:border-color .2s;cursor:pointer}
+.event-item:hover{border-color:var(--amber)}
+.event-date{background:var(--forest);color:white;border-radius:var(--r-md);padding:8px 10px;text-align:center;flex-shrink:0;min-width:44px}
+.event-day{font-size:18px;font-weight:700;line-height:1}
+.event-mon{font-size:9px;opacity:.6;text-transform:uppercase;margin-top:2px}
+.event-info-tags{display:flex;gap:4px;margin-bottom:4px}
+.event-tag{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:3px}
+.event-tag.k{background:rgba(74,124,89,.12);color:var(--green)}
+.event-tag.g{background:rgba(196,129,58,.12);color:var(--amber)}
+.event-tag.online{background:rgba(44,36,22,.08);color:var(--ink-soft)}
+.event-info-title{font-size:13px;font-weight:600;color:var(--forest);margin-bottom:2px}
+.event-info-meta{font-size:11px;color:var(--ink-muted)}
+.event-register{margin-left:auto;flex-shrink:0;font-size:11px;font-weight:600;background:var(--amber);color:white;border:none;padding:6px 12px;border-radius:var(--r-sm);cursor:pointer;align-self:center}
+
+/* ═══════════════════════════════════
+   LỊCH SỬ & LỘ TRÌNH
+═══════════════════════════════════ */
+.lo-trinh-card{background:var(--white);border-radius:var(--r-xl);border:1px solid var(--border);padding:24px;margin-bottom:16px}
+.lt-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.lt-score{font-family:var(--font-d);font-size:18px;font-weight:700}
+.lt-score.k{color:var(--green)}
+.lt-score.g{color:var(--amber)}
+.lt-score.a{color:#6B9AB8}
+.lt-progress{height:6px;background:var(--border-soft);border-radius:3px;margin-bottom:12px;overflow:hidden}
+.lt-progress-fill{height:100%;border-radius:3px}
+.lt-desc{font-size:13px;color:var(--ink-soft);line-height:1.65;margin-bottom:16px}
+.lt-suggestions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lt-suggest{background:var(--ivory-light);border-radius:var(--r-md);padding:12px;border:1px solid var(--border);cursor:pointer;transition:all .2s}
+.lt-suggest:hover{border-color:var(--amber);background:var(--amber-pale)}
+.lt-suggest-label{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--amber);margin-bottom:4px}
+.lt-suggest-text{font-size:12.5px;color:var(--forest);line-height:1.45}
+
+/* ═══════════════════════════════════
+   QUẢN LÝ TÀI KHOẢN
+═══════════════════════════════════ */
+.account-section{background:var(--white);border-radius:var(--r-xl);border:1px solid var(--border);padding:24px;margin-bottom:16px}
+.account-section-title{font-size:14px;font-weight:700;color:var(--forest);margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.field-group{display:flex;flex-direction:column;gap:5px}
+.field-label{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-muted)}
+.field-value{font-size:14px;color:var(--forest);font-weight:500}
+.field-missing{font-size:13px;color:var(--ink-muted);font-style:italic}
+.field-input{border:1.5px solid var(--border);border-radius:var(--r-md);padding:10px 14px;font-size:13px;font-family:inherit;color:var(--ink);background:var(--ivory-light);width:100%}
+.field-input:focus{outline:none;border-color:var(--amber);background:white}
+.profile-missing-alert{background:rgba(196,129,58,.08);border:1px solid rgba(196,129,58,.25);border-radius:var(--r-lg);padding:14px 18px;margin-bottom:20px;display:flex;align-items:flex-start;gap:10px}
+.profile-missing-icon{font-size:18px;flex-shrink:0}
+.profile-missing-text{font-size:13px;color:var(--ink-soft);line-height:1.55}
+.profile-missing-text strong{color:var(--amber);display:block;margin-bottom:3px}
+.missing-fields{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.missing-field-tag{font-size:11px;background:rgba(196,129,58,.12);color:var(--amber);padding:3px 10px;border-radius:20px;font-weight:500}
+
+/* ═══════════════════════════════════
+   LOGOUT MODAL
+═══════════════════════════════════ */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(44,36,22,.5);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal-overlay.open{display:flex}
+.modal-box{background:white;border-radius:20px;padding:36px;max-width:380px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(44,36,22,.2)}
+.modal-icon{font-size:36px;margin-bottom:14px}
+.modal-title{font-family:var(--font-d);font-size:20px;font-weight:600;color:var(--forest);margin-bottom:8px}
+.modal-desc{font-size:14px;color:var(--ink-soft);line-height:1.6;margin-bottom:24px}
+.modal-actions{display:flex;gap:10px;justify-content:center}
+
+/* ═══════════════════════════════════
+   NGƯỜI ĐỒNG HÀNH — CHAT
+═══════════════════════════════════ */
+.chat-layout{display:grid;grid-template-columns:1fr;gap:0;height:calc(100vh - 200px)}
+.chat-box-full{background:var(--white);border-radius:var(--r-xl);border:1px solid var(--border);overflow:hidden;display:flex;flex-direction:column}
+.chat-header{background:var(--forest);padding:16px 20px;display:flex;align-items:center;gap:12px}
+.chat-header-av{width:36px;height:36px;border-radius:50%;background:var(--amber);color:white;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.chat-header-name{font-size:14px;font-weight:600;color:white}
+.chat-header-status{font-size:11px;color:rgba(255,255,255,.6)}
+.chat-messages{flex:1;padding:20px;overflow-y:auto;display:flex;flex-direction:column;gap:14px;min-height:0}
+.chat-msg-wrap{display:flex;gap:8px;align-items:flex-end}
+.chat-msg-wrap.user{flex-direction:row-reverse}
+.chat-msg-av{width:28px;height:28px;border-radius:50%;background:var(--amber);color:white;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.chat-msg-av.user{background:var(--forest)}
+.chat-bubble{max-width:75%;font-size:13px;line-height:1.6;padding:10px 14px;border-radius:14px}
+.chat-bubble.ca{background:var(--ivory-light);color:var(--ink);border-radius:4px 14px 14px 14px}
+.chat-bubble.user{background:var(--forest);color:white;border-radius:14px 14px 4px 14px}
+.chat-time{font-size:10px;color:var(--ink-muted);margin-top:4px;text-align:center}
+.chat-chips-bar{display:flex;gap:6px;padding:8px 16px;border-top:1px solid var(--border-soft);flex-wrap:wrap}
+.chat-chip{font-size:11px;padding:5px 12px;border-radius:20px;border:1px solid var(--border);color:var(--ink-soft);cursor:pointer;background:white;transition:all .2s;white-space:nowrap}
+.chat-chip:hover{border-color:var(--amber);color:var(--amber)}
+.chat-input-row{border-top:1px solid var(--border);padding:12px 16px;display:flex;gap:8px;align-items:center}
+.chat-input{flex:1;border:1.5px solid var(--border);border-radius:20px;padding:9px 16px;font-size:13px;font-family:inherit;color:var(--ink);background:var(--ivory-light)}
+.chat-input:focus{outline:none;border-color:var(--amber);background:white}
+.chat-send{width:36px;height:36px;border-radius:50%;background:var(--amber);border:none;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* ═══════════════════════════════════
+   LỊCH HẸN
+═══════════════════════════════════ */
+.lich-item{border:1px solid var(--border);border-radius:var(--r-lg);padding:16px 18px;margin-bottom:12px;transition:border-color .2s}
+.lich-item:hover{border-color:var(--amber)}
+.lich-tags{display:flex;gap:6px;margin-bottom:8px}
+.lich-tag{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:4px}
+.lich-tag.ws{background:rgba(74,124,89,.12);color:var(--green)}
+.lich-tag.ca{background:rgba(196,129,58,.12);color:var(--amber)}
+.lich-tag.confirmed{background:rgba(28,52,38,.08);color:var(--forest)}
+.lich-tag.cancel{color:#e05050;background:rgba(224,80,80,.08)}
+.lich-title{font-size:14px;font-weight:600;color:var(--forest);margin-bottom:6px}
+.lich-meta{font-size:12px;color:var(--ink-muted);display:flex;gap:14px;flex-wrap:wrap;margin-bottom:10px}
+.lich-actions{display:flex;gap:8px}
+.btn-lich{font-size:11px;font-weight:600;padding:6px 14px;border-radius:var(--r-sm);cursor:pointer}
+.btn-lich.book{background:var(--forest);color:white;border:none}
+.btn-lich.cancel{background:transparent;color:#e05050;border:1.5px solid rgba(224,80,80,.3)}
+.dstation-rec{background:var(--white);border-radius:var(--r-lg);border:1px solid var(--border);padding:18px;margin-bottom:10px;cursor:pointer;transition:all .2s}
+.dstation-rec:hover{border-color:var(--amber);box-shadow:var(--shadow-sm)}
+.dstation-rec-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px}
+.dstation-rec-name{font-size:14px;font-weight:700;color:var(--forest)}
+.dstation-rec-km{font-size:12px;font-weight:700;color:var(--amber);background:rgba(196,129,58,.1);padding:3px 10px;border-radius:20px}
+.dstation-rec-addr{font-size:12px;color:var(--ink-soft);margin-bottom:6px}
+.dstation-rec-meta{font-size:11px;color:var(--ink-muted)}
+
+/* ═══════════════════════════════════
+   ĐĂNG KÝ CA
+═══════════════════════════════════ */
+.ca-register-hero{background:var(--forest);border-radius:var(--r-xl);padding:40px;margin-bottom:24px;position:relative;overflow:hidden}
+.ca-register-hero::after{content:'CA';position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-family:var(--font-d);font-size:120px;font-weight:700;color:rgba(255,255,255,.04);line-height:1;pointer-events:none}
+.ca-register-hero-title{font-family:var(--font-d);font-size:28px;font-weight:600;color:white;margin-bottom:10px;line-height:1.2;position:relative;z-index:1}
+.ca-register-hero-title em{font-style:italic;color:var(--amber)}
+.ca-register-hero-sub{font-size:14px;color:rgba(255,255,255,.65);line-height:1.7;max-width:500px;position:relative;z-index:1}
+.ca-benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
+.ca-benefit{background:var(--white);border-radius:var(--r-lg);border:1px solid var(--border);padding:20px;text-align:center}
+.ca-benefit-icon{font-size:28px;margin-bottom:10px}
+.ca-benefit-title{font-size:13px;font-weight:700;color:var(--forest);margin-bottom:4px}
+.ca-benefit-desc{font-size:12px;color:var(--ink-soft);line-height:1.5}
+
+/* ═══════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════ */
+@media(max-width:900px){
+  .auth-layout{grid-template-columns:1fr}
+  .auth-left{display:none}
+  .app-layout{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .grid-2,.grid-3,.field-row,.ca-benefits,.lt-suggestions{grid-template-columns:1fr}
+}
+
+/* ── WORKSHOP DETAIL (tab-panel) ── */
+.ws-detail-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-soft);cursor:pointer;margin-bottom:20px;padding:8px 14px;border-radius:var(--r-sm);border:1px solid var(--border);background:white;transition:all .2s}
+.ws-detail-back:hover{border-color:var(--amber);color:var(--amber)}
+.ws-detail-hero{background:var(--forest);border-radius:var(--r-xl);padding:32px;color:white;margin-bottom:20px;position:relative;overflow:hidden}
+.ws-detail-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:rgba(196,129,58,.15)}
+.ws-detail-tags{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.ws-detail-tag{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:20px;background:rgba(255,255,255,.15);color:rgba(255,255,255,.9)}
+.ws-detail-title{font-family:var(--font-d);font-size:22px;font-weight:700;margin-bottom:8px;line-height:1.3}
+.ws-detail-meta{font-size:13px;color:rgba(255,255,255,.7);display:flex;flex-wrap:wrap;gap:16px}
+.ws-detail-grid{display:grid;grid-template-columns:1fr 300px;gap:20px;align-items:start}
+.ws-detail-section{margin-bottom:20px}
+.ws-detail-section-title{font-size:15px;font-weight:700;color:var(--forest);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--border-soft)}
+.ws-detail-takeaway{display:flex;gap:10px;align-items:flex-start;padding:12px;background:var(--ivory-light);border-radius:var(--r-md);margin-bottom:8px;font-size:13px;color:var(--ink)}
+.ws-detail-takeaway span:first-child{color:var(--green);font-size:15px;flex-shrink:0}
+.ws-agenda-item{display:flex;gap:14px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border-soft)}
+.ws-agenda-item:last-child{border-bottom:none}
+.ws-agenda-time{min-width:60px;font-size:12px;font-weight:700;color:var(--amber)}
+.ws-agenda-title{font-size:13px;font-weight:600;color:var(--forest);margin-bottom:3px}
+.ws-agenda-desc{font-size:12px;color:var(--ink-soft)}
+/* Sidebar card */
+.ws-reg-card{background:var(--white);border:2px solid var(--amber);border-radius:var(--r-xl);padding:24px;text-align:center}
+.ws-reg-price{font-size:26px;font-weight:700;color:var(--green);margin-bottom:4px}
+.ws-reg-limit{font-size:12px;color:var(--ink-muted);margin-bottom:14px}
+.ws-reg-bar-wrap{background:var(--border-soft);border-radius:4px;height:7px;margin-bottom:6px}
+.ws-reg-bar-fill{height:100%;border-radius:4px;background:var(--green)}
+.ws-reg-count{font-size:11px;color:var(--ink-muted);margin-bottom:18px}
+/* ── MODAL ĐĂNG KÝ WORKSHOP ── */
+#ws-reg-modal{display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.45);align-items:center;justify-content:center;padding:20px}
+#ws-reg-modal.open{display:flex}
+.ws-reg-modal-box{background:white;border-radius:var(--r-xl);width:100%;max-width:440px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.ws-reg-modal-head{background:var(--forest);padding:20px 24px;color:white}
+.ws-reg-modal-title{font-family:var(--font-d);font-size:17px;font-weight:700;margin-bottom:4px}
+.ws-reg-modal-sub{font-size:12px;color:rgba(255,255,255,.7)}
+.ws-reg-modal-body{padding:24px}
+.ws-reg-form-row{margin-bottom:16px}
+.ws-reg-form-label{font-size:12px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;display:block;text-transform:uppercase;letter-spacing:.05em}
+.ws-reg-form-input{width:100%;border:1.5px solid var(--border);border-radius:var(--r-md);padding:10px 14px;font-size:13px;font-family:inherit;color:var(--ink);background:var(--ivory-light);box-sizing:border-box}
+.ws-reg-form-input:focus{outline:none;border-color:var(--amber);background:white}
+.ws-reg-modal-footer{padding:0 24px 24px;display:flex;gap:10px}
+/* ── TOAST ── */
+#ws-toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--forest);color:white;padding:14px 24px;border-radius:40px;font-size:13px;font-weight:600;z-index:9999;transition:transform .35s cubic-bezier(.34,1.56,.64,1);box-shadow:0 8px 24px rgba(0,0,0,.2);white-space:nowrap;display:flex;align-items:center;gap:8px}
+#ws-toast.show{transform:translateX(-50%) translateY(0)}
+
+
+/* ── CA CREDENTIALS ── */
+.ca-stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0}
+.ca-stat{background:var(--ivory-light);border-radius:var(--r-md);padding:14px 12px;text-align:center;border:1px solid var(--border-soft)}
+.ca-stat-num{font-size:20px;font-weight:700;color:var(--forest);margin-bottom:2px}
+.ca-stat-label{font-size:10px;color:var(--ink-muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.ca-specialty-tags{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0}
+.ca-specialty-tag{font-size:11px;padding:5px 12px;border-radius:20px;border:1px solid var(--border);color:var(--forest);font-weight:600;background:white}
+.ca-rating-row{display:flex;align-items:center;gap:10px;margin-top:16px;padding-top:16px;border-top:1px solid var(--border-soft)}
+.ca-stars{color:#F59E0B;font-size:16px;letter-spacing:2px}
+.ca-rating-num{font-size:18px;font-weight:700;color:var(--forest)}
+.ca-rating-count{font-size:12px;color:var(--ink-muted)}
+/* Fix chat box height */
+.chat-box-fixed{background:var(--white);border-radius:var(--r-xl);border:1px solid var(--border);overflow:hidden;display:flex;flex-direction:column;height:460px}
+
+
+/* ── LỊCH DETAIL ── */
+
+
+/* ── NRX FULL PAGE ── */
+/* page-nrx-full dùng .page/.page.active chung */
+.nrxf-wrap{max-width:640px;margin:0 auto;padding:40px 24px 80px}
+.nrxf-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px}
+.nrxf-logo{font-size:20px;font-weight:800;color:var(--forest);font-family:var(--font-d)}
+.nrxf-logo em{color:var(--amber);font-style:italic}
+.nrxf-skip{font-size:12px;color:var(--ink-muted);cursor:pointer;padding:6px 12px;border-radius:20px;border:1px solid var(--border)}
+.nrxf-skip:hover{border-color:var(--amber);color:var(--amber)}
+/* Progress */
+.nrxf-prog-wrap{margin-bottom:28px}
+.nrxf-prog-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.nrxf-prog-group{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--amber)}
+.nrxf-prog-count{font-size:12px;color:var(--ink-muted)}
+.nrxf-prog-track{height:6px;background:var(--border-soft);border-radius:3px;overflow:hidden}
+.nrxf-prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--green),var(--amber));transition:width .4s ease}
+/* Group tabs */
+.nrxf-group-tabs{display:flex;gap:8px;margin-bottom:24px}
+.nrxf-group-tab{flex:1;padding:8px 4px;border-radius:var(--r-md);border:1.5px solid var(--border);background:white;font-size:11px;font-weight:600;color:var(--ink-muted);text-align:center;cursor:default}
+.nrxf-group-tab.done{background:var(--green);border-color:var(--green);color:white}
+.nrxf-group-tab.active{border-color:var(--amber);color:var(--amber);background:rgba(196,129,58,.06)}
+/* Card */
+.nrxf-card{background:white;border-radius:var(--r-xl);padding:32px;box-shadow:0 2px 16px rgba(0,0,0,.06);margin-bottom:20px}
+.nrxf-q-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--amber);margin-bottom:12px}
+.nrxf-q-text{font-family:var(--font-d);font-size:20px;font-weight:700;color:var(--forest);line-height:1.35;margin-bottom:24px}
+/* Options */
+.nrxf-opts{display:flex;flex-direction:column;gap:10px}
+.nrxf-opt{display:flex;align-items:center;gap:14px;padding:14px 18px;border:1.5px solid var(--border);border-radius:var(--r-md);background:white;cursor:pointer;text-align:left;transition:all .15s;width:100%}
+.nrxf-opt:hover{border-color:var(--amber);background:rgba(196,129,58,.04)}
+.nrxf-opt.selected{border-color:var(--amber);background:rgba(196,129,58,.08)}
+.nrxf-opt.selected .nrxf-opt-check{opacity:1}
+.nrxf-opt-icon{font-size:22px;flex-shrink:0;width:32px;text-align:center}
+.nrxf-opt-text{font-size:14px;color:var(--ink);line-height:1.4;flex:1}
+.nrxf-opt-check{width:20px;height:20px;border-radius:50%;background:var(--amber);color:white;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;opacity:0;transition:opacity .15s}
+/* Multi-select note */
+.nrxf-multi-note{font-size:11px;color:var(--ink-muted);margin-bottom:12px}
+/* Slider */
+.nrxf-slider-wrap{padding:8px 0}
+.nrxf-slider{width:100%;-webkit-appearance:none;height:6px;border-radius:3px;background:var(--border-soft);outline:none}
+.nrxf-slider::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:var(--amber);cursor:pointer;box-shadow:0 2px 8px rgba(196,129,58,.4)}
+.nrxf-slider-labels{display:flex;justify-content:space-between;margin-top:8px}
+.nrxf-slider-label{font-size:11px;color:var(--ink-muted)}
+.nrxf-slider-val{text-align:center;font-size:22px;font-weight:700;color:var(--forest);margin-bottom:12px}
+/* Nav buttons */
+.nrxf-nav{display:flex;gap:12px;align-items:center}
+.nrxf-btn-back{padding:12px 20px;border-radius:var(--r-md);border:1.5px solid var(--border);background:white;color:var(--ink-soft);font-size:14px;cursor:pointer}
+.nrxf-btn-next{flex:1;padding:14px;border-radius:var(--r-md);background:var(--forest);color:white;font-size:14px;font-weight:700;border:none;cursor:pointer;transition:background .2s}
+.nrxf-btn-next:hover{background:#2a4a38}
+.nrxf-btn-next:disabled{background:var(--border);cursor:not-allowed}
+/* Result screen */
+.nrxf-result{background:white;border-radius:var(--r-xl);padding:32px;box-shadow:0 2px 16px rgba(0,0,0,.06)}
+.nrxf-result-title{font-family:var(--font-d);font-size:22px;font-weight:700;color:var(--forest);margin-bottom:6px}
+.nrxf-result-sub{font-size:13px;color:var(--ink-muted);margin-bottom:28px}
+.nrxf-scores{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px}
+.nrxf-score-card{border-radius:var(--r-md);padding:16px 12px;text-align:center;border:1px solid var(--border-soft)}
+.nrxf-score-num{font-size:32px;font-weight:800;margin-bottom:4px}
+.nrxf-score-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-muted)}
+.nrxf-score-status{font-size:10px;margin-top:4px;padding:2px 8px;border-radius:20px;display:inline-block;font-weight:600}
+.nrxf-insight{background:var(--ivory-light);border-radius:var(--r-md);padding:16px;margin-bottom:16px;font-size:13px;color:var(--ink-soft);line-height:1.65;border-left:3px solid var(--amber)}
+
+
+/* ── SURVEY BANNER TRONG LỘ TRÌNH ── */
+.lt-survey-banner{border-radius:var(--r-lg);padding:20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;border:1.5px dashed}
+.lt-survey-banner.khoe{background:rgba(74,124,89,.05);border-color:rgba(74,124,89,.3)}
+.lt-survey-banner.giau{background:rgba(196,129,58,.05);border-color:rgba(196,129,58,.3)}
+.lt-survey-banner.an{background:rgba(107,154,184,.08);border-color:rgba(107,154,184,.3)}
+.lt-survey-icon{font-size:32px;flex-shrink:0}
+.lt-survey-text{flex:1}
+.lt-survey-title{font-size:14px;font-weight:700;color:var(--forest);margin-bottom:3px}
+.lt-survey-sub{font-size:12px;color:var(--ink-muted)}
+.lt-survey-btn{font-size:12px;font-weight:700;padding:9px 18px;border-radius:var(--r-md);border:none;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.lt-survey-btn.khoe{background:var(--green);color:white}
+.lt-survey-btn.giau{background:var(--amber);color:white}
+.lt-survey-btn.an{background:#6B9AB8;color:white}
+/* Score card trên overview — trạng thái chưa làm */
+.score-card-empty .ov-score-num{color:var(--border) !important}
+.score-card-empty .ov-score-bar-fill{width:0% !important;background:var(--border) !important}
+.score-card-empty .ov-score-label-status{color:var(--ink-muted) !important}
+
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ PAGE: ONBOARDING ═══════════════ -->
+<div class="page active" id="page-onboard">
+  <div class="auth-layout">
+    <!-- Left brand panel -->
+    <div class="auth-left">
+      <div class="auth-logo">D-<em>ONE</em></div>
+      <div>
+        <h1 class="auth-tagline">Sống trọn vẹn<br><em>mỗi ngày.</em></h1>
+        <p class="auth-sub">Một nơi tổng hợp toàn bộ hành trình Sống Khỏe · Sống Giàu · Sống An của bạn.</p>
+        <div class="auth-pillars">
+          <div class="auth-pillar"><div class="auth-pillar-dot k"></div><span class="auth-pillar-text">🌿 Sống Khỏe — Nếp sống xanh cùng Anvie & Gobio</span></div>
+          <div class="auth-pillar"><div class="auth-pillar-dot g"></div><span class="auth-pillar-text">📈 Sống Giàu — Đầu tư DSIP cùng VNDGO</span></div>
+          <div class="auth-pillar"><div class="auth-pillar-dot a"></div><span class="auth-pillar-text">🛡 Sống An — Bảo vệ toàn diện cùng PTIcare</span></div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:rgba(255,255,255,.3)">© 2025 D-ONE · IPA Living Platform</div>
+    </div>
+    <!-- Right form panel -->
+    <div class="auth-right">
+      <div class="auth-form-wrap">
+
+        <!-- ── FORM: ĐĂNG NHẬP (default) ── -->
+        <div id="form-login-main">
+          <div class="auth-title">Đăng nhập</div>
+          <p class="auth-desc">Chào mừng trở lại D-ONE — hành trình sống trọn vẹn của bạn đang chờ.</p>
+          <div class="form-group">
+            <label class="form-label">Email hoặc Số điện thoại</label>
+            <input class="form-input" type="text" placeholder="email@example.com hoặc 0912345678" id="login-contact">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mật khẩu</label>
+            <input class="form-input" type="password" placeholder="Nhập mật khẩu" id="login-password">
+            <div style="text-align:right;margin-top:5px">
+              <a class="btn-text" style="font-size:12px">Quên mật khẩu?</a>
+            </div>
+          </div>
+          <button class="form-submit" onclick="goToNRX()">→ Đăng nhập</button>
+          <div style="text-align:center;margin-top:12px;font-size:13px;color:var(--ink-muted)">
+            Hoặc đăng nhập bằng <a class="btn-text" onclick="showLoginOtpPopup()" style="font-size:13px">mã OTP →</a>
+          </div>
+          <div class="form-divider">hoặc</div>
+          <button class="btn-ghost" style="width:100%;justify-content:center;font-size:13px;margin-bottom:20px" onclick="goToNRX()">
+            <span style="font-weight:700;color:#4285F4;font-size:15px">G</span>&nbsp; Đăng nhập với Google
+          </button>
+          <div style="border-top:1px solid var(--border);padding-top:20px;text-align:center">
+            <div style="font-size:13px;color:var(--ink-soft);margin-bottom:10px">Chưa có tài khoản D-ONE?</div>
+            <button class="btn-primary" style="width:100%;justify-content:center;font-size:14px" onclick="showRegisterForm()">
+              Tạo tài khoản mới →
+            </button>
+          </div>
+        </div>
+
+        <!-- ── FORM: ĐĂNG KÝ (hidden by default) ── -->
+        <div id="form-register-main" style="display:none">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+            <button onclick="showLoginForm()" style="background:none;border:none;cursor:pointer;color:var(--ink-muted);font-size:18px;padding:0;line-height:1">←</button>
+            <div class="auth-title" style="margin:0">Tạo tài khoản</div>
+          </div>
+          <p class="auth-desc">Bắt đầu hành trình Sống Khỏe · Sống Giàu · Sống An cùng D-ONE.</p>
+          <div class="form-group">
+            <label class="form-label">Email hoặc Số điện thoại</label>
+            <input class="form-input" type="text" placeholder="email@example.com hoặc 0912345678">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tạo mật khẩu</label>
+            <input class="form-input" type="password" placeholder="Tối thiểu 8 ký tự">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Xác nhận mật khẩu</label>
+            <input class="form-input" type="password" placeholder="Nhập lại mật khẩu">
+          </div>
+          <button class="form-submit" onclick="showRegisterStep2()">→ Tạo tài khoản</button>
+          <div style="text-align:center;margin-top:12px;font-size:13px;color:var(--ink-muted)">
+            Hoặc đăng ký nhanh bằng <a class="btn-text" onclick="showOtpPopup()" style="font-size:13px">nhận mã OTP →</a>
+          </div>
+          <div class="form-divider">hoặc</div>
+          <button class="btn-ghost" style="width:100%;justify-content:center;font-size:13px" onclick="showRegisterStep2()">
+            <span style="font-weight:700;color:#4285F4;font-size:15px">G</span>&nbsp; Tiếp tục với Google
+          </button>
+        </div>
+
+        <!-- ── STEP 2: Thông tin cá nhân (sau khi đăng ký) ── -->
+        <div id="form-register-step2" style="display:none">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+            <button onclick="showRegisterForm()" style="background:none;border:none;cursor:pointer;color:var(--ink-muted);font-size:18px;padding:0;line-height:1">←</button>
+            <div class="auth-title" style="margin:0">Gần xong rồi! 🎉</div>
+          </div>
+          <p class="auth-desc">Thêm tên để cá nhân hóa trải nghiệm. Bạn có thể bổ sung thêm sau.</p>
+          <div class="form-group">
+            <label class="form-label">Họ và tên</label>
+            <input class="form-input" type="text" placeholder="Nguyễn Văn A" id="user-name-input">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Ngày sinh <span style="color:var(--ink-muted);font-size:10px;text-transform:none;font-weight:400">(không bắt buộc)</span></label>
+            <input class="form-input" type="date">
+          </div>
+          <button class="form-submit" onclick="goToNRX()">→ Vào D-ONE &amp; Bắt đầu khảo sát</button>
+          <div style="text-align:center;margin-top:12px">
+            <button class="btn-text" onclick="goToDashboard()" style="color:var(--ink-muted);font-size:12px">Bỏ qua, vào Dashboard →</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ PAGE: NRX SURVEY ═══════════════ -->
+<div class="page" id="page-nrx">
+  <div class="nrx-layout">
+    <div class="nrx-wrap">
+      <div class="nrx-header">
+        <div class="nrx-logo">D-<em>ONE</em></div>
+        <div class="nrx-prog-bar"><div class="nrx-prog-fill" id="nrx-prog" style="width:20%"></div></div>
+        <div class="nrx-prog-label"><span id="nrx-prog-txt">Câu 1 / 5</span><span style="color:var(--amber);font-weight:600">Khảo sát nhanh NRX</span></div>
+      </div>
+      <div class="nrx-card">
+        <div class="nrx-q-num" id="nrx-qnum"></div>
+        <div class="nrx-q" id="nrx-q"></div>
+        <div class="nrx-opts" id="nrx-opts"></div>
+        <!-- Skip banner -->
+        <div class="nrx-skip-banner" id="nrx-skip-banner">
+          <div class="nrx-skip-text">Khảo sát giúp chúng tôi ghép CA phù hợp và cá nhân hóa lộ trình cho bạn. Bạn chắc chắn muốn bỏ qua?</div>
+          <div class="nrx-skip-actions">
+            <button class="nrx-skip-confirm" onclick="goToDashboard()">Bỏ qua</button>
+            <button class="nrx-skip-cancel" onclick="hideSkipBanner()">Tiếp tục làm</button>
+          </div>
+        </div>
+      </div>
+      <div class="nrx-nav">
+        <button class="nrx-back" id="nrx-back" onclick="nrxBack()">← Quay lại</button>
+        <button class="nrx-skip" onclick="showSkipBanner()">Bỏ qua khảo sát</button>
+        <button class="nrx-next" id="nrx-next" onclick="nrxNext()" disabled>Tiếp theo →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ PAGE: DASHBOARD ═══════════════ -->
+<!-- ═══════════════════ PAGE: NRX FULL ═══════════════════ -->
+<div class="page" id="page-nrx-full">
+  <div class="nrxf-wrap">
+    <div class="nrxf-top">
+      <div class="nrxf-logo">D-<em>ONE</em></div>
+      <button class="nrxf-skip" onclick="skipNrxFull()">Bỏ qua, làm sau</button>
+    </div>
+    <div id="nrxf-group-hero" style="margin-bottom:24px;padding:20px;border-radius:var(--r-xl);background:var(--forest);color:white">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:6px" id="nrxf-hero-eyebrow">Khảo sát</div>
+      <div style="font-size:20px;font-weight:700;font-family:var(--font-d)" id="nrxf-hero-title">Lộ trình 3 nếp sống</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.7);margin-top:4px" id="nrxf-hero-sub">4 câu hỏi · ~2 phút</div>
+    </div>
+    <div class="nrxf-group-tabs" id="nrxf-tabs-wrap" style="display:none">
+      <div class="nrxf-group-tab" id="nrxf-tab-0">🌿 Sống Khỏe</div>
+      <div class="nrxf-group-tab" id="nrxf-tab-1">💰 Sống Giàu</div>
+      <div class="nrxf-group-tab" id="nrxf-tab-2">🛡 Sống An</div>
+    </div>
+    <div class="nrxf-prog-wrap">
+      <div class="nrxf-prog-header">
+        <span class="nrxf-prog-group" id="nrxf-group-label">Sống Khỏe</span>
+        <span class="nrxf-prog-count" id="nrxf-count">Câu 1 / 12</span>
+      </div>
+      <div class="nrxf-prog-track"><div class="nrxf-prog-fill" id="nrxf-prog" style="width:8%"></div></div>
+    </div>
+    <div class="nrxf-card" id="nrxf-card">
+      <div class="nrxf-q-label" id="nrxf-qlabel"></div>
+      <div class="nrxf-q-text" id="nrxf-q"></div>
+      <div class="nrxf-multi-note" id="nrxf-multi-note" style="display:none">✦ Có thể chọn nhiều đáp án</div>
+      <div id="nrxf-opts"></div>
+    </div>
+    <div class="nrxf-nav">
+      <button class="nrxf-btn-back" id="nrxf-back" onclick="nrxfBack()">← Quay lại</button>
+      <button class="nrxf-btn-next" id="nrxf-next" onclick="nrxfNext()" disabled>Tiếp theo →</button>
+    </div>
+    <div id="nrxf-result-screen" style="display:none;margin-top:24px">
+      <div class="nrxf-result">
+        <div class="nrxf-result-title">🎉 Hành trình sống trọn vẹn của bạn</div>
+        <div class="nrxf-result-sub">Dựa trên 12 câu trả lời, D-ONE đã xây dựng lộ trình cá nhân hóa cho bạn.</div>
+        <div class="nrxf-scores">
+          <div class="nrxf-score-card" style="background:#F0FDF4">
+            <div class="nrxf-score-num" style="color:var(--green)" id="nrxf-score-khoe">–</div>
+            <div class="nrxf-score-label">Sống Khỏe</div>
+            <div class="nrxf-score-status" id="nrxf-status-khoe"></div>
+          </div>
+          <div class="nrxf-score-card" style="background:#FFFBEB">
+            <div class="nrxf-score-num" style="color:var(--amber)" id="nrxf-score-giau">–</div>
+            <div class="nrxf-score-label">Sống Giàu</div>
+            <div class="nrxf-score-status" id="nrxf-status-giau"></div>
+          </div>
+          <div class="nrxf-score-card" style="background:#EFF6FF">
+            <div class="nrxf-score-num" style="color:#3B82F6" id="nrxf-score-an">–</div>
+            <div class="nrxf-score-label">Sống An</div>
+            <div class="nrxf-score-status" id="nrxf-status-an"></div>
+          </div>
+        </div>
+        <div class="nrxf-insight" id="nrxf-insight"></div>
+        <button class="nrxf-btn-next" style="width:100%;margin-top:8px" onclick="finishNrxFull()">Vào Dashboard của tôi →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-dashboard">
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-head">
+        <div class="sidebar-logo" onclick="goTo('onboard')">D-<em>ONE</em></div>
+      </div>
+      <div class="sidebar-user">
+        <div class="sidebar-av" id="sidebar-av">AT</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name" id="sidebar-name">Nguyễn Anh Tuấn</div>
+          <div class="sidebar-user-badge">Thành viên D-ONE</div>
+        </div>
+      </div>
+      <!-- Profile completion -->
+      <div class="profile-completion">
+        <div class="profile-completion-label">
+          <span>Hồ sơ của bạn</span>
+          <span id="profile-pct">60%</span>
+        </div>
+        <div class="profile-bar"><div class="profile-bar-fill" id="profile-bar" style="width:60%"></div></div>
+        <div class="profile-complete-tip">Còn thiếu: CCCD, địa chỉ. <a onclick="switchTab('account')">Cập nhật →</a></div>
+      </div>
+      <!-- Nav -->
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Tổng quan</div>
+        <div class="nav-item active" onclick="switchTab('overview')"><span class="nav-item-icon">🏠</span>Tổng quan</div>
+        <div class="nav-item" onclick="switchTab('lo-trinh')"><span class="nav-item-icon">🗺</span>Lộ trình 3 nếp sống</div>
+        <div class="nav-section-label">Kết nối</div>
+        <div class="nav-item" onclick="switchTab('dong-hanh')"><span class="nav-item-icon">👤</span>Người đồng hành</div>
+        <div class="nav-item" onclick="switchTab('lich')"><span class="nav-item-icon">📅</span>Lịch của tôi <span class="nav-item-badge">2</span></div>
+        <div class="nav-section-label">Mua sắm</div>
+        <div class="nav-item" onclick="switchTab('don-hang')"><span class="nav-item-icon">📋</span>Hợp đồng & Đơn hàng</div>
+        <div class="nav-section-label">Tài khoản</div>
+        <div class="nav-item" onclick="switchTab('account')"><span class="nav-item-icon">⚙️</span>Quản lý tài khoản</div>
+        <div class="nav-item" onclick="switchTab('ca-register')"><span class="nav-item-icon">🤝</span>Đăng ký đồng hành CA</div>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="sidebar-logout" onclick="showLogoutModal()">
+          <span style="font-size:15px">↩</span> Đăng xuất
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main-content">
+
+      <!-- TAB: TỔNG QUAN -->
+      <div class="tab-panel active" id="tab-overview">
+        <div class="tab-header">
+          <div class="tab-title">Chào Bạn, <em style="font-family:var(--font-d);font-style:italic;color:var(--amber)" id="overview-name">Nguyễn Anh Tuấn</em> 👋</div>
+          <div class="tab-subtitle">Thứ Ba, ngày 17/06/2026 · Hành trình sống trọn vẹn của bạn đang được theo dõi.</div>
+        </div>
+
+        <!-- NRX Scores -->
+        <div class="grid-3" style="margin-bottom:20px">
+          <div class="score-card">
+            <div class="score-card-label k">Sống Khỏe <span class="score-badge good">Duy trì tốt</span></div>
+            <div class="score-num">65</div>
+            <div class="score-bar"><div class="score-bar-fill" id="lt-bar-khoe" style="width:65%;background:var(--green)"></div></div>
+            <div class="score-desc">Dinh dưỡng khá tốt, cần cải thiện giấc ngủ</div>
+          </div>
+          <div class="score-card">
+            <div class="score-card-label g">Sống Giàu <span class="score-badge warn">Cần chú ý</span></div>
+            <div class="score-num">40</div>
+            <div class="score-bar"><div class="score-bar-fill" id="lt-bar-giau" style="width:40%;background:var(--amber)"></div></div>
+            <div class="score-desc">Chưa có kế hoạch đầu tư định kỳ</div>
+          </div>
+          <div class="score-card">
+            <div class="score-card-label a">Sống An <span class="score-badge warn">Cần chú ý</span></div>
+            <div class="score-num">55</div>
+            <div class="score-bar"><div class="score-bar-fill" id="lt-bar-an" style="width:55%;background:#6B9AB8"></div></div>
+            <div class="score-desc">Chỉ có BHYT, chưa có bảo hiểm sức khỏe</div>
+          </div>
+        </div>
+        <div class="grid-2" style="margin-bottom:20px">
+          <!-- Nhiệm vụ hàng ngày -->
+          <div class="widget">
+            <div class="widget-title">Nhiệm vụ hàng ngày <span class="widget-title-link" onclick="switchTab('lo-trinh')">Xem lộ trình →</span></div>
+            <div class="mission-list">
+              <div class="mission-item" onclick="toggleMission(this)"><div class="mission-check done"></div><span class="mission-text">Uống đủ 2L nước thổ hữu cơ</span><span class="mission-tag k">KHỎE</span></div>
+              <div class="mission-item" onclick="toggleMission(this)"><div class="mission-check"></div><span class="mission-text">Ăn 1 đĩa organic hạt khô đổi dào</span><span class="mission-tag k">KHỎE</span></div>
+              <div class="mission-item" onclick="toggleMission(this)"><div class="mission-check"></div><span class="mission-text">Tích lũy VNDGO định kỳ hôm nay</span><span class="mission-tag g">GIÀU</span></div>
+              <div class="mission-item" onclick="toggleMission(this)"><div class="mission-check done"></div><span class="mission-text">Đặt 6.000 bước thiền hành</span><span class="mission-tag a">AN</span></div>
+              <div class="mission-item" onclick="toggleMission(this)"><div class="mission-check"></div><span class="mission-text">10 phút hít thở chánh niệm</span><span class="mission-tag k">KHỎE</span></div>
+            </div>
+          </div>
+          <!-- CA -->
+          <div class="widget">
+            <div class="widget-title">Người đồng hành CA <span class="widget-title-link" onclick="switchTab('dong-hanh')">Xem chi tiết →</span></div>
+            <div class="ca-card">
+              <div class="ca-av">HT</div>
+              <div>
+                <div class="ca-info-name">Bà Võ Thị Hoài Thư</div>
+                <div class="ca-info-role">Client Advisor · Anvie & VNDGO Specialist</div>
+                <div class="ca-online">Trực tuyến</div>
+                <div class="ca-actions">
+                  <button class="btn-ca msg" onclick="switchTab('dong-hanh')">💬 Chat</button>
+                  <button class="btn-ca book" onclick="switchTab('lich')">📅 Đặt hẹn</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Workshop sắp diễn ra -->
+        <div class="widget">
+          <div class="widget-title">Workshop sắp diễn ra <span class="widget-title-link">Xem tất cả →</span></div>
+          <div class="event-item">
+            <div class="event-date"><div class="event-day">15</div><div class="event-mon">T6</div></div>
+            <div>
+              <div class="event-info-tags"><span class="event-tag k">Sống Khỏe</span><span class="event-tag online">Offline</span></div>
+              <div class="event-info-title">Bếp nhà Homefood / Trà chuyện Tôi Là Thảo Mộc</div>
+              <div class="event-info-meta">📍 Dstation Hoàn Kiếm · BS. Nguyễn Hoài An</div>
+            </div>
+            <button class="event-register">Đăng ký</button>
+          </div>
+          <div class="event-item">
+            <div class="event-date"><div class="event-day">20</div><div class="event-mon">T5</div></div>
+            <div>
+              <div class="event-info-tags"><span class="event-tag g">Sống Giàu</span><span class="event-tag online">Online</span></div>
+              <div class="event-info-title">DGO Life – Nếp sống đầu tư bền vững</div>
+              <div class="event-info-meta">🌐 Zoom D-ONE · Chuyên gia Lâm Luyện</div>
+            </div>
+            <button class="event-register">Đăng ký</button>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- TAB: WORKSHOP DETAIL -->
+      <div class="tab-panel" id="tab-ws-detail">
+        <button class="ws-detail-back" onclick="switchTab('overview')">← Quay lại</button>
+        <div class="ws-detail-hero">
+          <div class="ws-detail-tags">
+            <span class="ws-detail-tag" id="wsd-pillar">Sống Khỏe</span>
+            <span class="ws-detail-tag" id="wsd-format">Offline</span>
+            <span class="ws-detail-tag">Miễn phí</span>
+          </div>
+          <div class="ws-detail-title" id="wsd-title">Bếp nhà Homefood / Trà chuyện Tôi Là Thảo Mộc</div>
+          <div class="ws-detail-meta">
+            <span id="wsd-date">📅 15/06/2026 · 19:00–21:00</span>
+            <span id="wsd-location">📍 Dstation Hoàn Kiếm</span>
+            <span id="wsd-speaker">👤 BS. Nguyễn Hoài An</span>
+          </div>
+        </div>
+
+        <div class="ws-detail-grid">
+          <!-- Main content -->
+          <div>
+            <div class="ws-detail-section">
+              <div class="ws-detail-section-title">Bạn sẽ học được gì?</div>
+              <div id="wsd-takeaways">
+                <div class="ws-detail-takeaway"><span>✓</span><span>Hiểu triết lý thân thổ bất nhị — lý do ăn đúng vùng đất mình sống</span></div>
+                <div class="ws-detail-takeaway"><span>✓</span><span>Nguyên tắc NAO — Natural, Authentic, Original khi chọn thực phẩm</span></div>
+                <div class="ws-detail-takeaway"><span>✓</span><span>Xây thói quen ăn uống 21 ngày — không cần willpower, chỉ cần hệ thống</span></div>
+                <div class="ws-detail-takeaway"><span>✓</span><span>Thực hành nấu 1 món gobio cơ bản ngay tại workshop</span></div>
+              </div>
+            </div>
+            <div class="ws-detail-section">
+              <div class="ws-detail-section-title">Lịch trình buổi học</div>
+              <div id="wsd-agenda">
+                <div class="ws-agenda-item"><div class="ws-agenda-time">19:00</div><div><div class="ws-agenda-title">Khai mạc & Giới thiệu không gian gobio</div><div class="ws-agenda-desc">Thưởng trà Vietcharm, làm quen cộng đồng</div></div></div>
+                <div class="ws-agenda-item"><div class="ws-agenda-time">19:20</div><div><div class="ws-agenda-title">Triết lý thân thổ bất nhị</div><div class="ws-agenda-desc">BS. Nguyễn Hoài An trình bày · 40 phút</div></div></div>
+                <div class="ws-agenda-item"><div class="ws-agenda-time">20:00</div><div><div class="ws-agenda-title">Thực hành nấu gobio</div><div class="ws-agenda-desc">Nấu cơm lứt + canh rau củ đơn giản · 45 phút</div></div></div>
+                <div class="ws-agenda-item"><div class="ws-agenda-time">20:45</div><div><div class="ws-agenda-title">Ăn cùng nhau & Q&A</div><div class="ws-agenda-desc">Thưởng thức bữa ăn vừa nấu, hỏi đáp tự do</div></div></div>
+                <div class="ws-agenda-item"><div class="ws-agenda-time" style="color:var(--green)">21:15</div><div><div class="ws-agenda-title">Networking & Kết nối cộng đồng</div><div class="ws-agenda-desc">Tự do giao lưu, kết thúc lúc 21:30</div></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sidebar -->
+          <div style="position:sticky;top:80px">
+            <div class="ws-reg-card">
+              <div class="ws-reg-price" id="wsd-price">Miễn phí</div>
+              <div class="ws-reg-limit">Giới hạn 30 người · Còn 8 chỗ</div>
+              <div class="ws-reg-bar-wrap"><div class="ws-reg-bar-fill" style="width:73%"></div></div>
+              <div class="ws-reg-count">22/30 người đã đăng ký</div>
+              <button class="btn-amber" style="width:100%;padding:14px;font-size:14px;border-radius:var(--r-md);margin-bottom:8px" onclick="openWsRegModal()">Đăng ký ngay →</button>
+              <div style="font-size:11px;color:var(--ink-muted)">Đăng ký qua D-ONE để nhận nhắc nhở tự động</div>
+            </div>
+            <div class="widget" style="margin-top:16px;padding:16px">
+              <div style="font-size:12px;font-weight:700;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Diễn giả</div>
+              <div style="display:flex;gap:12px;align-items:center">
+                <div style="width:44px;height:44px;border-radius:50%;background:var(--forest);color:white;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0" id="wsd-speaker-av">HA</div>
+                <div>
+                  <div style="font-size:14px;font-weight:600;color:var(--forest)" id="wsd-speaker-name">BS. Nguyễn Hoài An</div>
+                  <div style="font-size:11px;color:var(--amber);font-weight:600;text-transform:uppercase;letter-spacing:.05em" id="wsd-speaker-role">Chuyên gia dinh dưỡng · Gobio</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- TAB: LỊCH DETAIL -->
+      <div class="tab-panel" id="tab-lich-detail">
+        <button class="ws-detail-back" onclick="switchTab('lich')">← Quay lại lịch của tôi</button>
+
+        <!-- Hero banner -->
+        <div class="ws-detail-hero" id="ld-hero" style="margin-bottom:20px">
+          <div class="ws-detail-tags" id="ld-tags"></div>
+          <div class="ws-detail-title" id="ld-title"></div>
+          <div class="ws-detail-meta">
+            <span id="ld-date">📅</span>
+            <span id="ld-loc"></span>
+            <span id="ld-speaker"></span>
+          </div>
+        </div>
+
+        <div class="ws-detail-grid">
+          <!-- Nội dung chính -->
+          <div>
+            <div class="ws-detail-section">
+              <div class="ws-detail-section-title">Bạn sẽ có được gì?</div>
+              <div id="ld-takeaways"></div>
+            </div>
+            <div class="ws-detail-section">
+              <div class="ws-detail-section-title">Lịch trình</div>
+              <div id="ld-agenda"></div>
+            </div>
+            <div class="ws-detail-section">
+              <div class="ws-detail-section-title">Lưu ý</div>
+              <div id="ld-note" style="font-size:13px;color:var(--ink-soft);line-height:1.7;background:var(--ivory-light);padding:14px 16px;border-radius:var(--r-md)"></div>
+            </div>
+          </div>
+
+          <!-- Sidebar -->
+          <div style="position:sticky;top:80px">
+            <div class="ws-reg-card" id="ld-action-card">
+              <div id="ld-action-icon" style="font-size:28px;margin-bottom:8px"></div>
+              <div id="ld-action-title" style="font-size:14px;font-weight:700;color:var(--forest);margin-bottom:4px"></div>
+              <div id="ld-action-sub" style="font-size:12px;color:var(--ink-muted);margin-bottom:18px"></div>
+              <button class="btn-amber" style="width:100%;padding:13px;border-radius:var(--r-md);font-size:13px" id="ld-action-btn"></button>
+            </div>
+            <div class="widget" style="margin-top:16px;padding:16px" id="ld-contact-card">
+              <div style="font-size:12px;font-weight:700;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Liên hệ hỗ trợ</div>
+              <div style="font-size:13px;color:var(--ink-soft)">Cần thay đổi lịch? Liên hệ CA hoặc hotline D-ONE.</div>
+              <button onclick="switchTab('dong-hanh')" style="width:100%;margin-top:12px;padding:10px;border-radius:var(--r-md);border:1.5px solid var(--border);background:white;color:var(--forest);font-size:12px;font-weight:600;cursor:pointer">💬 Nhắn tin với CA</button>
+            </div>
+            <!-- Hủy lịch — trong sidebar -->
+            <div class="widget" style="margin-top:16px;padding:16px;border:1.5px solid #FECACA">
+              <div style="font-size:11px;color:#DC2626;margin-bottom:10px;line-height:1.5">⚠️ Hủy lịch sẽ xóa đăng ký. Không thể hoàn tác.</div>
+              <button onclick="cancelLichPage()" style="width:100%;padding:10px;border-radius:var(--r-md);border:1.5px solid #DC2626;background:white;color:#DC2626;font-size:12px;font-weight:600;cursor:pointer">Hủy lịch này</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: LỘ TRÌNH 3 NẾP SỐNG -->
+      <div class="tab-panel" id="tab-lo-trinh">
+        <div class="tab-header">
+          <div class="tab-title">Lộ trình <em style="font-family:var(--font-d);font-style:italic;color:var(--amber)">3 nếp sống</em></div>
+          <div class="tab-subtitle">Dựa trên kết quả NRX của bạn — cập nhật định kỳ theo tiến trình thực tế.</div>
+        </div>
+        <!-- Sống Khỏe -->
+        <div class="lo-trinh-card">
+          <!-- Survey banner Sống Khỏe -->
+          <div class="lt-survey-banner khoe" id="lt-banner-khoe">
+            <div class="lt-survey-icon">📋</div>
+            <div class="lt-survey-text">
+              <div class="lt-survey-title">Chưa có điểm Sống Khỏe</div>
+              <div class="lt-survey-sub">Làm 4 câu khảo sát để nhận gợi ý cá nhân hóa phù hợp với bạn</div>
+            </div>
+            <button class="lt-survey-btn khoe" onclick="startNrxGroup(0)">Làm khảo sát →</button>
+          </div>
+          <div class="lt-header" id="lt-header-khoe" style="display:none">
+            <div style="display:flex;align-items:center;gap:10px"><span style="font-size:20px">🌿</span><div class="lt-score k">Sống Khỏe — <span id="lt-score-khoe">65</span>%</div></div>
+            <span style="font-size:11px;font-weight:600;color:var(--green);background:rgba(74,124,89,.1);padding:4px 12px;border-radius:20px">Đang duy trì tốt</span>
+          </div>
+          <div class="lt-progress"><div class="lt-progress-fill" id="lt-bar-khoe" style="width:65%;background:var(--green)"></div></div>
+          <div class="lt-desc">Nếp ăn uống của bạn đang khá tốt. Homefood gợi ý bổ sung mầm lúa mạch và cải thiện giấc ngủ để đạt trạng thái tối ưu.</div>
+          <!-- Gobio products -->
+          <div style="background:var(--green-pale);border-radius:var(--r-lg);padding:18px;border:1px solid rgba(74,124,89,.2);margin-bottom:14px">
+            <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin-bottom:12px">🛒 Sản phẩm Gobio gợi ý cho bạn</div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+              <div onclick="window.open('https://homefood.com.vn','_blank')" style="background:white;border-radius:var(--r-md);padding:12px;border:1px solid var(--border);cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='var(--border)'">
+                <div style="font-size:24px;text-align:center;margin-bottom:6px">🌾</div>
+                <div style="font-size:11px;font-weight:600;color:var(--forest);margin-bottom:2px">Gạo lứt đen hữu cơ</div>
+                <div style="font-size:12px;font-weight:700;color:var(--amber)">130.000₫</div>
+              </div>
+              <div onclick="window.open('https://homefood.com.vn','_blank')" style="background:white;border-radius:var(--r-md);padding:12px;border:1px solid var(--border);cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='var(--border)'">
+                <div style="font-size:24px;text-align:center;margin-bottom:6px">🍯</div>
+                <div style="font-size:11px;font-weight:600;color:var(--forest);margin-bottom:2px">Mật ong rừng TN</div>
+                <div style="font-size:12px;font-weight:700;color:var(--amber)">320.000₫</div>
+              </div>
+              <div onclick="window.open('https://homefood.com.vn','_blank')" style="background:white;border-radius:var(--r-md);padding:12px;border:1px solid var(--border);cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='var(--border)'">
+                <div style="font-size:24px;text-align:center;margin-bottom:6px">🍵</div>
+                <div style="font-size:11px;font-weight:600;color:var(--forest);margin-bottom:2px">Trà detox Thanh Lọc</div>
+                <div style="font-size:12px;font-weight:700;color:var(--amber)">95.000₫</div>
+              </div>
+            </div>
+            <a href="https://homefood.com.vn" target="_blank" class="btn-ghost" style="font-size:12px;color:var(--green);border-color:rgba(74,124,89,.3)">Xem toàn bộ sản phẩm tại Gobio →</a>
+          </div>
+          <div class="lt-suggestions">
+            <div class="lt-suggest" onclick="window.open('https://homefood.com.vn','_blank')"><div class="lt-suggest-label">🛒 Sản phẩm gợi ý</div><div class="lt-suggest-text">Gạo lứt đen hữu cơ + Trà detox Thanh Lọc → mua tại Gobio</div></div>
+            <div class="lt-suggest"><div class="lt-suggest-label">📖 Bài viết</div><div class="lt-suggest-text">Bữa sáng 10 phút cho người bận rộn — BS. Nguyễn Hoài An</div></div>
+          </div>
+        </div>
+        <!-- Sống Giàu -->
+        <div class="lo-trinh-card">
+          <!-- Survey banner Sống Giàu -->
+          <div class="lt-survey-banner giau" id="lt-banner-giau">
+            <div class="lt-survey-icon">📋</div>
+            <div class="lt-survey-text">
+              <div class="lt-survey-title">Chưa có điểm Sống Giàu</div>
+              <div class="lt-survey-sub">Làm 4 câu khảo sát để nhận gợi ý đầu tư phù hợp với tình hình của bạn</div>
+            </div>
+            <button class="lt-survey-btn giau" onclick="startNrxGroup(1)">Làm khảo sát →</button>
+          </div>
+          <div class="lt-header" id="lt-header-giau" style="display:none">
+            <div style="display:flex;align-items:center;gap:10px"><span style="font-size:20px">📈</span><div class="lt-score g">Sống Giàu — <span id="lt-score-giau">40</span>%</div></div>
+            <span style="font-size:11px;font-weight:600;color:var(--amber);background:rgba(196,129,58,.1);padding:4px 12px;border-radius:20px">Cần chú trọng</span>
+          </div>
+          <div class="lt-progress"><div class="lt-progress-fill" id="lt-bar-giau" style="width:40%;background:var(--amber)"></div></div>
+          <div class="lt-desc">Bạn chưa bắt đầu đầu tư định kỳ. DSIP là điểm khởi đầu lý tưởng — không cần hiểu chứng khoán, tự động hóa hoàn toàn.</div>
+          <!-- DSIP products -->
+          <div style="background:var(--amber-pale);border-radius:var(--r-lg);padding:18px;border:1px solid rgba(196,129,58,.2);margin-bottom:14px">
+            <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);margin-bottom:12px">📈 Gói DSIP — Đầu tư định kỳ tự động</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+              <div style="background:white;border-radius:var(--r-md);padding:12px;border:1px solid var(--border);cursor:pointer" onclick="window.open('https://dsip.vndirect.com.vn','_blank')">
+                <div style="font-size:10px;font-weight:700;color:var(--amber);margin-bottom:3px">TỰ PHONG</div>
+                <div style="font-size:13px;font-weight:600;color:var(--forest)">Từ 300.000₫/tháng</div>
+                <div style="font-size:11px;color:var(--ink-muted)">Linh hoạt, bảo thủ</div>
+              </div>
+              <div style="background:white;border-radius:var(--r-md);padding:12px;border:1px solid var(--border);cursor:pointer" onclick="window.open('https://dsip.vndirect.com.vn','_blank')">
+                <div style="font-size:10px;font-weight:700;color:var(--amber);margin-bottom:3px">TĂNG TRƯỞNG</div>
+                <div style="font-size:13px;font-weight:600;color:var(--forest)">Từ 500.000₫/tháng</div>
+                <div style="font-size:11px;color:var(--ink-muted)">Tăng trưởng dài hạn</div>
+              </div>
+            </div>
+            <a href="https://dsip.vndirect.com.vn" target="_blank" class="btn-amber" style="font-size:12px;padding:9px 18px;display:inline-flex">Xem tất cả gói DSIP trên VNDirect →</a>
+          </div>
+          <div class="lt-suggestions">
+            <div class="lt-suggest" onclick="switchTab('lich')"><div class="lt-suggest-label">📅 Workshop sắp tới</div><div class="lt-suggest-text">DGO Life – Nếp sống đầu tư bền vững · 20/06 · Miễn phí</div></div>
+            <div class="lt-suggest"><div class="lt-suggest-label">📖 Tìm hiểu thêm</div><div class="lt-suggest-text">Tháp HWG — tại sao H phải xây trước W?</div></div>
+          </div>
+        </div>
+        <!-- Sống An -->
+        <div class="lo-trinh-card">
+          <!-- Survey banner Sống An -->
+          <div class="lt-survey-banner an" id="lt-banner-an">
+            <div class="lt-survey-icon">📋</div>
+            <div class="lt-survey-text">
+              <div class="lt-survey-title">Chưa có điểm Sống An</div>
+              <div class="lt-survey-sub">Làm 4 câu khảo sát để nhận đánh giá về mức độ bảo vệ tài chính của bạn</div>
+            </div>
+            <button class="lt-survey-btn an" onclick="startNrxGroup(2)">Làm khảo sát →</button>
+          </div>
+          <div class="lt-header" id="lt-header-an" style="display:none">
+            <div style="display:flex;align-items:center;gap:10px"><span style="font-size:20px">🛡</span><div class="lt-score a">Sống An — <span id="lt-score-an">55</span>%</div></div>
+            <span style="font-size:11px;font-weight:600;color:#6B9AB8;background:rgba(107,154,184,.1);padding:4px 12px;border-radius:20px">Cần bổ sung</span>
+          </div>
+          <div class="lt-progress"><div class="lt-progress-fill" id="lt-bar-an" style="width:55%;background:#6B9AB8"></div></div>
+          <div class="lt-desc">Bạn chỉ đang có BHYT cơ bản. Một sự cố y tế có thể ảnh hưởng lớn đến kế hoạch tài chính. PTIcare đang chuẩn bị các gói phù hợp cho bạn.</div>
+          <div style="background:rgba(107,154,184,.08);border:1px solid rgba(107,154,184,.2);border-radius:var(--r-lg);padding:18px;margin-bottom:14px;text-align:center">
+            <div style="font-size:24px;margin-bottom:8px">🛡</div>
+            <div style="font-size:14px;font-weight:600;color:var(--forest);margin-bottom:4px">PTIcare — Đang phát triển</div>
+            <div style="font-size:13px;color:var(--ink-soft);margin-bottom:12px">Các gói bảo hiểm sức khỏe, nhân thọ và tài sản đang được chuẩn bị. Đăng ký nhận thông báo sớm nhất.</div>
+            <button class="btn-ghost" style="font-size:12px">🔔 Nhận thông báo khi ra mắt</button>
+          </div>
+          <div class="lt-suggestions">
+            <div class="lt-suggest" onclick="switchTab('dong-hanh')"><div class="lt-suggest-label">👤 Tư vấn cá nhân</div><div class="lt-suggest-text">Đặt lịch với CA Hoài Thư để được tư vấn bảo hiểm phù hợp</div></div>
+            <div class="lt-suggest"><div class="lt-suggest-label">📖 Tìm hiểu thêm</div><div class="lt-suggest-text">7 nguyên tắc P·T·I·C·A·R·E và ý nghĩa với cuộc sống bạn</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: NGƯỜI ĐỒNG HÀNH -->
+      <div class="tab-panel" id="tab-dong-hanh">
+        <div class="tab-header">
+          <div class="tab-title">Người đồng hành <em style="font-family:var(--font-d);font-style:italic;color:var(--amber)">CA</em></div>
+          <div class="tab-subtitle">Client Advisor — người đồng hành dài hạn trên cả 3 nhánh.</div>
+        </div>
+
+        <!-- CA Profile Card -->
+        <div class="widget" style="margin-bottom:16px">
+          <div style="display:flex;gap:18px;align-items:flex-start">
+            <div style="width:64px;height:64px;border-radius:50%;background:var(--amber);color:white;font-size:22px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">HT</div>
+            <div style="flex:1">
+              <div style="font-size:18px;font-weight:700;color:var(--forest);margin-bottom:2px">Bà Võ Thị Hoài Thư</div>
+              <div style="font-size:12px;color:var(--ink-muted);margin-bottom:8px">Client Advisor · Anvie IPA Living</div>
+              <div class="ca-online">● Trực tuyến</div>
+            </div>
+            <div style="text-align:right;font-size:12px;color:var(--ink-muted);flex-shrink:0">
+              <div>📞 090.334.xxx</div>
+              <div style="margin-top:3px">✉️ hoalthu@ipaliving.vn</div>
+            </div>
+          </div>
+
+          <!-- Stats -->
+          <div class="ca-stats-grid">
+            <div class="ca-stat">
+              <div class="ca-stat-num">7+</div>
+              <div class="ca-stat-label">Năm kinh nghiệm</div>
+            </div>
+            <div class="ca-stat">
+              <div class="ca-stat-num">142</div>
+              <div class="ca-stat-label">Khách đang quản lý</div>
+            </div>
+            <div class="ca-stat">
+              <div class="ca-stat-num">4.9</div>
+              <div class="ca-stat-label">Điểm đánh giá</div>
+            </div>
+            <div class="ca-stat">
+              <div class="ca-stat-num">96%</div>
+              <div class="ca-stat-label">Hài lòng</div>
+            </div>
+          </div>
+
+          <!-- Specialties -->
+          <div style="font-size:12px;font-weight:600;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Lĩnh vực chuyên môn</div>
+          <div class="ca-specialty-tags">
+            <span class="ca-specialty-tag">🌿 Dinh dưỡng & Gobio</span>
+            <span class="ca-specialty-tag">📈 Đầu tư DSIP/VNDGO</span>
+            <span class="ca-specialty-tag">🛡 Bảo hiểm PTIcare</span>
+            <span class="ca-specialty-tag">🧘 Lối sống chánh niệm</span>
+          </div>
+
+          <!-- Rating -->
+          <div class="ca-rating-row">
+            <div class="ca-stars">★★★★★</div>
+            <div class="ca-rating-num">4.9</div>
+            <div class="ca-rating-count">· 87 đánh giá từ khách hàng</div>
+          </div>
+
+          <!-- Quote -->
+          <div style="background:var(--ivory-light);border-left:3px solid var(--amber);padding:12px 16px;border-radius:0 var(--r-md) var(--r-md) 0;font-size:13px;color:var(--ink-soft);font-style:italic;line-height:1.65;margin-top:16px">
+            "Xin chào! Thư rất vui được đồng hành cùng Bạn. Dựa trên kết quả NRX, Thư thấy Bạn đang cần chú trọng hơn vào phần Sống Giàu — hãy bắt đầu với DSIP nhé!"
+          </div>
+        </div>
+
+        <!-- Chat box -->
+        <div class="chat-box-fixed">
+          <div class="chat-header">
+            <div class="chat-header-av">HT</div>
+            <div>
+              <div class="chat-header-name">Hoài Thư</div>
+              <div class="chat-header-status">🟢 Trực tuyến · Phản hồi trong vài phút</div>
+            </div>
+          </div>
+          <div class="chat-messages" id="chat-msgs">
+            <div class="chat-time">Hôm nay, 09:00</div>
+            <div class="chat-msg-wrap">
+              <div class="chat-msg-av">HT</div>
+              <div class="chat-bubble ca">Xin chào Tuấn! Thư đã xem qua kết quả NRX của Bạn. Điểm Sống Giàu (40%) đang cần cải thiện nhất. Bạn đã từng tìm hiểu về đầu tư định kỳ chưa?</div>
+            </div>
+          </div>
+          <div class="chat-chips-bar">
+            <span class="chat-chip" onclick="sendMsg(this)">💰 Tư vấn DSIP</span>
+            <span class="chat-chip" onclick="sendMsg(this)">🌿 Sản phẩm Gobio</span>
+            <span class="chat-chip" onclick="sendMsg(this)">📅 Đặt lịch gặp</span>
+            <span class="chat-chip" onclick="sendMsg(this)">🛡 Hỏi về bảo hiểm</span>
+          </div>
+          <div class="chat-input-row">
+            <input class="chat-input" id="chat-input" type="text" placeholder="Nhắn tin với Hoài Thư..." onkeydown="if(event.key==='Enter')sendChatMsg()">
+            <button class="chat-send" onclick="sendChatMsg()">➤</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: LỊCH CỦA TÔI -->
+      <div class="tab-panel" id="tab-lich">
+        <div class="tab-header">
+          <div class="tab-title">Lịch của tôi</div>
+          <div class="tab-subtitle">Quản lý lịch hẹn tư vấn và Dstation gần bạn.</div>
+        </div>
+        <div class="grid-2" style="align-items:start">
+          <div>
+            <div class="widget" style="margin-bottom:16px">
+              <div class="widget-title">Lịch hẹn của bạn <button class="btn-amber" style="font-size:11px;padding:6px 12px;border-radius:var(--r-sm)" onclick="alert('Tính năng đặt lịch sẽ sớm ra mắt!')">+ Đặt lịch mới</button></div>
+              <div class="lich-item" onclick="openLichDetail('ws1')">
+                <div class="lich-tags"><span class="lich-tag ws">Workshop</span><span class="lich-tag confirmed">Đã xác nhận</span></div>
+                <div class="lich-title">Bếp nhà Homefood / Trà chuyện Tôi Là Thảo Mộc</div>
+                <div class="lich-meta"><span>📅 15/06/2026 · 19:00–21:00</span><span>📍 Dstation Hoàn Kiếm</span></div>
+                <div class="lich-actions"><span style="font-size:12px;color:var(--ink-muted)">Xem chi tiết →</span></div>
+              </div>
+              <div class="lich-item" onclick="openLichDetail('ca1')" style="margin-top:8px">
+                <div class="lich-tags"><span class="lich-tag ca">Hẹn CA 1-1</span><span class="lich-tag" style="background:rgba(196,129,58,.1);color:var(--amber)">Đang xử lý</span></div>
+                <div class="lich-title">Tư vấn lộ trình DSIP cùng Hoài Thư</div>
+                <div class="lich-meta"><span>📅 20/06/2026 · 14:30–15:00</span><span>🌐 Zoom D-ONE</span></div>
+                <div class="lich-actions"><span style="font-size:12px;color:var(--ink-muted)">Xem chi tiết →</span></div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="widget">
+              <div class="widget-title">Dstation gần bạn</div>
+              <div class="dstation-rec">
+                <div class="dstation-rec-head"><div class="dstation-rec-name">📍 Dstation Hoàn Kiếm</div><div class="dstation-rec-km">1.2 km</div></div>
+                <div class="dstation-rec-addr">12 Tràng Tiền, Hoàn Kiếm, Hà Nội</div>
+                <div class="dstation-rec-meta">⏰ 08:00–21:00 · 📞 024 3939 1234</div>
+              </div>
+              <div class="dstation-rec">
+                <div class="dstation-rec-head"><div class="dstation-rec-name">📍 Dstation Cầu Giấy</div><div class="dstation-rec-km">4.7 km</div></div>
+                <div class="dstation-rec-addr">88 Trần Duy Hưng, Cầu Giấy, Hà Nội</div>
+                <div class="dstation-rec-meta">⏰ 08:00–21:00 · 📞 024 3939 5678</div>
+              </div>
+              <div class="dstation-rec">
+                <div class="dstation-rec-head"><div class="dstation-rec-name">📍 Dstation Ba Đình</div><div class="dstation-rec-km">6.3 km</div></div>
+                <div class="dstation-rec-addr">40 Vạn Bảo, Ba Đình, Hà Nội</div>
+                <div class="dstation-rec-meta">⏰ 08:00–21:00 · 📞 024 3939 9096</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: CỬA HÀNG GOBIO -->
+      <!-- TAB: HỢP ĐỒNG & ĐƠN HÀNG -->
+      <div class="tab-panel" id="tab-don-hang">
+        <div class="tab-header">
+          <div class="tab-title">Hợp đồng & <em style="font-family:var(--font-d);font-style:italic;color:var(--amber)">Đơn hàng</em></div>
+          <div class="tab-subtitle">Tổng hợp đơn hàng Gobio, gói DSIP đang đầu tư và hợp đồng PTIcare.</div>
+        </div>
+
+        <!-- GOBIO — Đơn hàng -->
+        <div class="widget" style="margin-bottom:16px">
+          <div class="widget-title">
+            🛒 Đơn hàng Gobio
+            <a href="https://homefood.com.vn" target="_blank" style="font-size:11px;color:var(--amber);font-weight:500">Mua thêm tại Gobio →</a>
+          </div>
+          <!-- Đơn hàng đang giao -->
+          <div style="border:1px solid rgba(74,124,89,.3);border-radius:var(--r-lg);padding:16px;margin-bottom:10px;background:var(--green-pale)">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+              <div style="font-size:12px;font-weight:700;color:var(--green)">🚚 Đang giao hàng</div>
+              <div style="font-size:11px;color:var(--ink-muted)">Mã đơn: GBH-20260615-001</div>
+            </div>
+            <div style="font-size:14px;font-weight:500;color:var(--forest);margin-bottom:4px">Gạo lứt đen Tây Bắc hữu cơ × 1</div>
+            <div style="font-size:12px;color:var(--ink-muted);margin-bottom:12px">Đặt ngày: 15/06/2026 · 130.000₫</div>
+            <!-- Tracking steps -->
+            <div style="display:flex;align-items:center;gap:0;position:relative">
+              <div style="position:absolute;top:10px;left:10px;right:10px;height:2px;background:var(--border)"></div>
+              <div style="position:absolute;top:10px;left:10px;width:60%;height:2px;background:var(--green)"></div>
+              <div style="display:flex;justify-content:space-between;width:100%;position:relative;z-index:1">
+                <div style="text-align:center">
+                  <div style="width:20px;height:20px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;margin:0 auto 4px">
+                    <span style="color:white;font-size:10px">✓</span>
+                  </div>
+                  <div style="font-size:10px;color:var(--green);font-weight:600">Đặt hàng</div>
+                </div>
+                <div style="text-align:center">
+                  <div style="width:20px;height:20px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;margin:0 auto 4px">
+                    <span style="color:white;font-size:10px">✓</span>
+                  </div>
+                  <div style="font-size:10px;color:var(--green);font-weight:600">Đóng gói</div>
+                </div>
+                <div style="text-align:center">
+                  <div style="width:20px;height:20px;border-radius:50%;background:var(--amber);display:flex;align-items:center;justify-content:center;margin:0 auto 4px">
+                    <span style="color:white;font-size:12px">🚚</span>
+                  </div>
+                  <div style="font-size:10px;color:var(--amber);font-weight:600">Đang giao</div>
+                </div>
+                <div style="text-align:center">
+                  <div style="width:20px;height:20px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 4px">
+                    <span style="color:var(--ink-muted);font-size:10px">📦</span>
+                  </div>
+                  <div style="font-size:10px;color:var(--ink-muted)">Đã nhận</div>
+                </div>
+              </div>
+            </div>
+            <div style="margin-top:10px;font-size:12px;color:var(--ink-soft);background:white;padding:8px 12px;border-radius:var(--r-sm)">
+              📍 Dự kiến giao: <strong>17/06/2026</strong> · Đơn vị vận chuyển: Giao Hàng Nhanh
+            </div>
+          </div>
+          <!-- Lịch sử -->
+          <div style="font-size:12px;font-weight:600;color:var(--ink-soft);margin-bottom:8px;letter-spacing:.04em;text-transform:uppercase">Lịch sử đơn hàng</div>
+          <div style="text-align:center;padding:24px;color:var(--ink-muted)">
+            <div style="font-size:13px">Chưa có đơn hàng hoàn thành nào.</div>
+          </div>
+        </div>
+
+        <!-- DSIP — Gói đang đầu tư -->
+        <div class="widget" style="margin-bottom:16px">
+          <div class="widget-title">
+            📈 Gói DSIP đang đầu tư
+            <a href="https://dsip.vndirect.com.vn" target="_blank" style="font-size:11px;color:var(--amber);font-weight:500">Quản lý tại VNDirect →</a>
+          </div>
+          <div style="border:1px solid rgba(196,129,58,.3);border-radius:var(--r-lg);padding:16px;background:var(--amber-pale)">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+              <div>
+                <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--amber)">DSIP · TỰ PHONG</div>
+                <div style="font-size:15px;font-weight:700;color:var(--forest);margin-top:2px">300.000₫ / tháng</div>
+              </div>
+              <div style="text-align:right">
+                <div style="font-size:11px;color:var(--ink-muted)">Tổng đã đầu tư</div>
+                <div style="font-size:17px;font-weight:700;color:var(--green)">900.000₫</div>
+              </div>
+            </div>
+            <div style="height:4px;background:rgba(196,129,58,.2);border-radius:2px;margin-bottom:6px;overflow:hidden">
+              <div style="width:30%;height:100%;background:var(--amber);border-radius:2px"></div>
+            </div>
+            <div style="font-size:11px;color:var(--ink-muted)">3 tháng · Bắt đầu: 15/03/2026 · Kỳ tiếp theo: 15/07/2026</div>
+          </div>
+          <div style="text-align:center;padding:16px;color:var(--ink-muted);font-size:13px;margin-top:4px">
+            Chưa có gói nào khác đang hoạt động. <a href="https://dsip.vndirect.com.vn" target="_blank" style="color:var(--amber);font-weight:500">Mở thêm gói DSIP →</a>
+          </div>
+        </div>
+
+        <!-- PTIcare — Hợp đồng -->
+        <div class="widget">
+          <div class="widget-title">🛡 Hợp đồng PTIcare</div>
+          <div style="text-align:center;padding:32px 20px">
+            <div style="font-size:36px;margin-bottom:10px">🛡</div>
+            <div style="font-size:14px;font-weight:600;color:var(--forest);margin-bottom:6px">PTIcare — Đang phát triển</div>
+            <div style="font-size:13px;color:var(--ink-soft);margin-bottom:14px">Các gói bảo hiểm sức khỏe và nhân thọ sẽ hiển thị tại đây khi PTIcare ra mắt.</div>
+            <button class="btn-ghost" style="font-size:12px">🔔 Nhận thông báo khi ra mắt</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: QUẢN LÝ TÀI KHOẢN -->
+      <div class="tab-panel" id="tab-account">
+        <div class="tab-header">
+          <div class="tab-title">Quản lý tài khoản</div>
+          <div class="tab-subtitle">Cập nhật thông tin để cá nhân hóa trải nghiệm D-ONE.</div>
+        </div>
+        <!-- Missing fields alert -->
+        <div class="profile-missing-alert">
+          <div class="profile-missing-icon">⚠️</div>
+          <div class="profile-missing-text">
+            <strong>Hồ sơ của bạn đang thiếu 40% thông tin</strong>
+            Bổ sung đầy đủ để CA có thể hỗ trợ bạn chính xác hơn và nhận gợi ý cá nhân hóa tốt nhất.
+            <div class="missing-fields">
+              <span class="missing-field-tag">CCCD</span>
+              <span class="missing-field-tag">Địa chỉ cư trú</span>
+              <span class="missing-field-tag">Giới tính</span>
+            </div>
+          </div>
+        </div>
+        <div class="account-section">
+          <div class="account-section-title">Thông tin cá nhân</div>
+
+          <div class="field-row">
+            <div class="field-group"><div class="field-label">Họ và tên</div><input class="field-input" type="text" value="Nguyễn Anh Tuấn"></div>
+            <div class="field-group"><div class="field-label">Giới tính</div>
+              <select class="field-input"><option value="">-- Chọn --</option><option>Nam</option><option>Nữ</option><option>Khác</option></select>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group"><div class="field-label">Ngày tháng năm sinh</div><input class="field-input" type="date" value="1990-01-15"></div>
+            <div class="field-group"><div class="field-label">Số điện thoại</div><input class="field-input" type="tel" value="0912 345 678"></div>
+          </div>
+          <div class="field-row">
+            <div class="field-group"><div class="field-label">Email</div><input class="field-input" type="email" value="tuan.nguyen@example.com"></div>
+            <div class="field-group"><div class="field-label">CCCD <span style="color:var(--amber);font-size:10px">*Còn thiếu</span></div><input class="field-input" type="text" placeholder="Nhập số CCCD"></div>
+          </div>
+          <div class="field-group"><div class="field-label">Địa chỉ cư trú <span style="color:var(--amber);font-size:10px">*Còn thiếu</span></div><input class="field-input" type="text" placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành phố"></div>
+          <div style="margin-top:18px">
+            <button class="btn-primary" onclick="saveProfile()" style="font-size:13px;padding:10px 24px">Lưu thông tin</button>
+          </div>
+        </div>
+        <div class="account-section">
+          <div class="account-section-title">Mật khẩu & Bảo mật</div>
+          <div class="field-row">
+            <div class="field-group"><div class="field-label">Mật khẩu hiện tại</div><input class="field-input" type="password" placeholder="••••••••"></div>
+            <div class="field-group"><div class="field-label">Mật khẩu mới</div><input class="field-input" type="password" placeholder="Tối thiểu 8 ký tự"></div>
+          </div>
+          <button class="btn-ghost" style="font-size:13px;margin-top:4px">Đổi mật khẩu</button>
+        </div>
+      </div>
+
+      <!-- TAB: ĐĂNG KÝ CA -->
+      <div class="tab-panel" id="tab-ca-register">
+        <div class="tab-header">
+          <div class="tab-title">Đăng ký đồng hành <em style="font-family:var(--font-d);font-style:italic;color:var(--amber)">Client Advisor</em></div>
+        </div>
+        <div class="ca-register-hero">
+          <div class="ca-register-hero-title">Nơi cùng Bạn<br>kiến tạo nếp sống <em>Client Advisor.</em></div>
+          <div class="ca-register-hero-sub">Không tìm nhân viên bán hàng. Mỗi CA là tấm gương thực hành ba nếp sống — Sống Khỏe · Sống Giàu · Sống An.</div>
+        </div>
+        <div class="ca-benefits" style="margin-bottom:24px">
+          <div class="ca-benefit"><div class="ca-benefit-icon">🌿</div><div class="ca-benefit-title">Thực chứng Sống Khỏe</div><div class="ca-benefit-desc">Chính mình sống đúng triết lý gobio trước khi đồng hành người khác.</div></div>
+          <div class="ca-benefit"><div class="ca-benefit-icon">📈</div><div class="ca-benefit-title">Thực hành Sống Giàu</div><div class="ca-benefit-desc">Có kỷ luật tài chính, xây tháp HWG của mình trước.</div></div>
+          <div class="ca-benefit"><div class="ca-benefit-icon">🛡</div><div class="ca-benefit-title">Thực hành Sống An</div><div class="ca-benefit-desc">Hiểu và có lớp bảo vệ cho bản thân và gia đình.</div></div>
+        </div>
+        <div class="account-section">
+          <div class="account-section-title">Form đăng ký Client Advisor</div>
+          <div class="field-row">
+            <div class="field-group"><div class="field-label">Họ và tên <span style="color:#e05050">*</span></div><input class="field-input" type="text" placeholder="Nguyễn Văn A" value="Nguyễn Anh Tuấn"></div>
+            <div class="field-group"><div class="field-label">Số điện thoại <span style="color:#e05050">*</span></div><input class="field-input" type="tel" placeholder="0912 345 678" value="0912 345 678"></div>
+          </div>
+          <div class="field-row">
+            <div class="field-group"><div class="field-label">Email <span style="color:#e05050">*</span></div><input class="field-input" type="email" value="tuan.nguyen@example.com"></div>
+            <div class="field-group"><div class="field-label">Ngày tháng năm sinh <span style="color:#e05050">*</span></div><input class="field-input" type="date" value="1990-01-15"></div>
+          </div>
+          <div class="field-group"><div class="field-label">Khu vực hoạt động đề xuất <span style="color:var(--ink-muted);font-size:10px;text-transform:none;font-weight:400">(nếu có)</span></div><input class="field-input" type="text" placeholder="VD: Quận Hoàn Kiếm, Hà Nội"></div>
+          <div class="field-group"><div class="field-label">Kinh nghiệm thực tế trước đây <span style="color:var(--ink-muted);font-size:10px;text-transform:none;font-weight:400">(nếu có)</span></div><textarea class="field-input" rows="3" placeholder="VD: 3 năm tư vấn tài chính, từng làm sales bảo hiểm..." style="resize:vertical"></textarea></div>
+          <div class="field-group"><div class="field-label">Giới thiệu ngắn về bản thân <span style="color:var(--ink-muted);font-size:10px;text-transform:none;font-weight:400">(nếu có)</span></div><textarea class="field-input" rows="4" placeholder="Chia sẻ về bản thân, lý do muốn trở thành CA của IPA Living..." style="resize:vertical"></textarea></div>
+          <div style="margin-top:18px;display:flex;gap:12px;align-items:center">
+            <button class="btn-amber" onclick="submitCA()" style="font-size:14px;padding:12px 28px">Gửi đơn đăng ký →</button>
+            <span style="font-size:12px;color:var(--ink-muted)">Đội ngũ sẽ liên hệ trong 24-48 giờ.</span>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- LOGIN OTP POPUP -->
+<div class="modal-overlay" id="loginOtpModal">
+  <div class="modal-box" style="max-width:420px">
+    <div class="modal-icon">📱</div>
+    <div class="modal-title">Đăng nhập bằng OTP</div>
+    <div class="modal-desc" style="margin-bottom:16px">Nhập email hoặc SĐT để nhận mã xác thực.</div>
+    <div class="form-group">
+      <label class="form-label">Email hoặc Số điện thoại</label>
+      <input class="form-input" type="text" placeholder="email@example.com hoặc 0912345678" id="login-otp-contact">
+    </div>
+    <div class="modal-actions" style="margin-bottom:12px">
+      <button class="btn-ghost" onclick="closeLoginOtpPopup()">Hủy</button>
+      <button class="btn-primary" onclick="showLoginOtpCode()">Gửi mã OTP →</button>
+    </div>
+    <!-- OTP input (hidden until sent) -->
+    <div id="login-otp-code" style="display:none">
+      <div style="font-size:13px;color:var(--ink-soft);text-align:center;margin-bottom:12px">Mã đã gửi đến số của bạn:</div>
+      <div class="otp-row" style="justify-content:center;margin-bottom:12px">
+        <input class="otp-input" type="text" maxlength="1" oninput="nextLoginOtp(this)">
+        <input class="otp-input" type="text" maxlength="1" oninput="nextLoginOtp(this)">
+        <input class="otp-input" type="text" maxlength="1" oninput="nextLoginOtp(this)">
+        <input class="otp-input" type="text" maxlength="1" oninput="nextLoginOtp(this)">
+        <input class="otp-input" type="text" maxlength="1" oninput="nextLoginOtp(this)">
+        <input class="otp-input" type="text" maxlength="1" oninput="nextLoginOtp(this,true)">
+      </div>
+      <div class="otp-resend" style="margin-bottom:12px">Không nhận được? <a onclick="alert('Đã gửi lại!')">Gửi lại</a></div>
+      <button class="btn-primary" style="width:100%;justify-content:center" onclick="closeLoginOtpPopup();goToNRX()">→ Xác nhận đăng nhập</button>
+    </div>
+  </div>
+</div>
+
+<!-- OTP POPUP MODAL (đăng ký) -->
+<div class="modal-overlay" id="otpModal">
+  <div class="modal-box" style="max-width:420px">
+    <div class="modal-icon">📱</div>
+    <div class="modal-title">Nhập mã OTP</div>
+    <div class="modal-desc">Mã 6 chữ số đã được gửi đến email/SĐT của bạn. Hiệu lực trong 5 phút.</div>
+    <div class="otp-row" style="justify-content:center;margin:0 0 12px">
+      <input class="otp-input" type="text" maxlength="1" oninput="nextOtpPopup(this)">
+      <input class="otp-input" type="text" maxlength="1" oninput="nextOtpPopup(this)">
+      <input class="otp-input" type="text" maxlength="1" oninput="nextOtpPopup(this)">
+      <input class="otp-input" type="text" maxlength="1" oninput="nextOtpPopup(this)">
+      <input class="otp-input" type="text" maxlength="1" oninput="nextOtpPopup(this)">
+      <input class="otp-input" type="text" maxlength="1" oninput="nextOtpPopup(this,true)">
+    </div>
+    <div class="otp-resend" style="margin-bottom:16px">Không nhận được? <a onclick="alert('Đã gửi lại!')">Gửi lại</a></div>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeOtpPopup()">Hủy</button>
+      <button class="btn-primary" onclick="closeOtpPopup();goToStep(3)">→ Xác nhận</button>
+    </div>
+  </div>
+</div>
+
+<!-- NRX RESULT MODAL -->
+<div class="modal-overlay" id="nrxResultModal">
+  <div class="modal-box" style="max-width:520px;padding:0;overflow:hidden">
+    <div style="background:var(--forest);padding:28px 32px 20px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:6px">KẾT QUẢ KHẢO SÁT NRX</div>
+      <div style="font-family:var(--font-d);font-size:22px;font-weight:600;color:white;line-height:1.2">Bạn đang thiên về<br><em style="font-style:italic;color:var(--amber)" id="nrx-result-dominant">Sống Khỏe</em></div>
+    </div>
+    <div style="padding:24px 32px">
+      <!-- Radar chart SVG -->
+      <div style="text-align:center;margin-bottom:20px">
+        <svg viewBox="0 0 260 240" width="260" height="240" xmlns="http://www.w3.org/2000/svg">
+          <!-- Grid lines -->
+          <polygon points="130,30 222,90 222,180 130,210 38,180 38,90" fill="none" stroke="#e8e2d8" stroke-width="1"/>
+          <polygon points="130,55 199,97 199,163 130,185 61,163 61,97" fill="none" stroke="#e8e2d8" stroke-width="1"/>
+          <polygon points="130,80 176,104 176,146 130,160 84,146 84,104" fill="none" stroke="#e8e2d8" stroke-width="1"/>
+          <!-- Axes -->
+          <line x1="130" y1="30" x2="130" y2="120" stroke="#d4cdc4" stroke-width="1"/>
+          <line x1="222" y1="90" x2="130" y2="120" stroke="#d4cdc4" stroke-width="1"/>
+          <line x1="222" y1="180" x2="130" y2="120" stroke="#d4cdc4" stroke-width="1"/>
+          <line x1="130" y1="210" x2="130" y2="120" stroke="#d4cdc4" stroke-width="1"/>
+          <line x1="38" y1="180" x2="130" y2="120" stroke="#d4cdc4" stroke-width="1"/>
+          <line x1="38" y1="90" x2="130" y2="120" stroke="#d4cdc4" stroke-width="1"/>
+          <!-- Data polygon — Khỏe 65%, Giàu 40%, An 55% -->
+          <polygon id="nrx-radar-shape"
+            points="130,55 181,101 193,162 130,168 79,162 79,101"
+            fill="rgba(196,129,58,0.18)" stroke="#C4813A" stroke-width="2" stroke-linejoin="round"/>
+          <!-- Labels -->
+          <text x="130" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#4A7C59">Sống Khỏe</text>
+          <text x="232" y="94" text-anchor="start" font-size="11" font-weight="700" fill="#4A7C59">65%</text>
+          <text x="232" y="184" text-anchor="start" font-size="11" font-weight="700" fill="#C4813A">Sống Giàu</text>
+          <text x="222" y="196" text-anchor="start" font-size="10" fill="#C4813A">40%</text>
+          <text x="130" y="222" text-anchor="middle" font-size="11" font-weight="700" fill="#6B9AB8">Sống An</text>
+          <text x="130" y="233" text-anchor="middle" font-size="10" fill="#6B9AB8">55%</text>
+          <!-- Center dot -->
+          <circle cx="130" cy="120" r="3" fill="#C4813A"/>
+        </svg>
+      </div>
+      <!-- Score summary -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px">
+        <div style="text-align:center;padding:12px;background:var(--green-pale);border-radius:var(--r-md);border:1px solid rgba(74,124,89,.2)">
+          <div style="font-size:10px;font-weight:700;color:var(--green);margin-bottom:4px">SỐNG KHỎE</div>
+          <div style="font-family:var(--font-d);font-size:24px;font-weight:700;color:var(--green)">65</div>
+          <div style="font-size:10px;color:var(--green)">Duy trì tốt ✓</div>
+        </div>
+        <div style="text-align:center;padding:12px;background:var(--amber-pale);border-radius:var(--r-md);border:1px solid rgba(196,129,58,.2)">
+          <div style="font-size:10px;font-weight:700;color:var(--amber);margin-bottom:4px">SỐNG GIÀU</div>
+          <div style="font-family:var(--font-d);font-size:24px;font-weight:700;color:var(--amber)">40</div>
+          <div style="font-size:10px;color:var(--amber)">Cần chú ý !</div>
+        </div>
+        <div style="text-align:center;padding:12px;background:rgba(107,154,184,.08);border-radius:var(--r-md);border:1px solid rgba(107,154,184,.2)">
+          <div style="font-size:10px;font-weight:700;color:#6B9AB8;margin-bottom:4px">SỐNG AN</div>
+          <div style="font-family:var(--font-d);font-size:24px;font-weight:700;color:#6B9AB8">55</div>
+          <div style="font-size:10px;color:#6B9AB8">Cần bổ sung</div>
+        </div>
+      </div>
+      <div style="background:var(--ivory-light);border-radius:var(--r-md);padding:12px 16px;font-size:13px;color:var(--ink-soft);line-height:1.6;margin-bottom:20px">
+        💡 <strong style="color:var(--forest)">Ưu tiên của bạn:</strong> Bắt đầu từ <strong style="color:var(--amber)">Sống Giàu</strong> — thiết lập DSIP định kỳ để xây nền tài chính vững chắc, đồng thời bổ sung bảo hiểm sức khỏe cho Sống An.
+      </div>
+      <button class="btn-primary" style="width:100%;justify-content:center;font-size:15px;padding:14px" onclick="closeNrxResult();goToDashboard()">Vào Dashboard của tôi →</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGOUT MODAL -->
+<div class="modal-overlay" id="logoutModal">
+  <div class="modal-box">
+    <div class="modal-icon">👋</div>
+    <div class="modal-title">Đăng xuất D-ONE?</div>
+    <div class="modal-desc">Bạn sẽ cần đăng nhập lại để tiếp tục hành trình sống trọn vẹn.</div>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeLogout()">Ở lại</button>
+      <button class="btn-primary" onclick="doLogout()">Đăng xuất</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── PAGES ── */
+const PAGES = ['onboard','nrx','nrx-full','dashboard'];
+function goTo(id) {
+  PAGES.forEach(p => { const el = document.getElementById('page-'+p); if(el) el.classList.remove('active'); });
+  const t = document.getElementById('page-'+id);
+  if(t) { t.classList.add('active'); window.scrollTo({top:0}); }
+}
+
+/* ── ONBOARDING — FORM SWITCHING ── */
+function showLoginForm() {
+  document.getElementById('form-login-main').style.display = '';
+  document.getElementById('form-register-main').style.display = 'none';
+  document.getElementById('form-register-step2').style.display = 'none';
+}
+function showRegisterForm() {
+  document.getElementById('form-login-main').style.display = 'none';
+  document.getElementById('form-register-main').style.display = '';
+  document.getElementById('form-register-step2').style.display = 'none';
+}
+function showRegisterStep2() {
+  document.getElementById('form-login-main').style.display = 'none';
+  document.getElementById('form-register-main').style.display = 'none';
+  document.getElementById('form-register-step2').style.display = '';
+}
+// Legacy compat
+function switchAuthTab(el, tab) {}
+function goToStep(n) { if(n===3) showRegisterStep2(); }
+function nextOtp(el, last) {
+  if(el.value.length===1) {
+    if(last) { closeOtpPopup(); showRegisterStep2(); return; }
+    const next = el.nextElementSibling; if(next) next.focus();
+  }
+}
+function goToNRX() {
+  const nameEl = document.getElementById('user-name-input');
+  const name = nameEl ? nameEl.value : '';
+  if(name) {
+    document.getElementById('sidebar-name').textContent = name;
+    document.getElementById('overview-name').textContent = name;
+    document.getElementById('sidebar-av').textContent = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  }
+  nrxCurrent = 0; nrxAnswers = {};
+  renderNrx(0);
+  goTo('nrx');
+}
+function goToDashboard() {
+  const nameEl = document.getElementById('user-name-input');
+  const name = nameEl ? nameEl.value || 'Nguyễn Anh Tuấn' : 'Nguyễn Anh Tuấn';
+  document.getElementById('sidebar-name').textContent = name;
+  document.getElementById('overview-name').textContent = name;
+  goTo('dashboard');
+  switchTab('overview');
+}
+
+/* ── LOGIN OTP POPUP ── */
+function showLoginOtpPopup() { document.getElementById('loginOtpModal').classList.add('open'); }
+function closeLoginOtpPopup() { document.getElementById('loginOtpModal').classList.remove('open'); document.getElementById('login-otp-code').style.display='none'; }
+function showLoginOtpCode() { document.getElementById('login-otp-code').style.display=''; }
+function nextLoginOtp(el, last) {
+  if(el.value.length===1) {
+    if(last) { closeLoginOtpPopup(); goToNRX(); return; }
+    const next = el.nextElementSibling; if(next) next.focus();
+  }
+}
+
+/* ── OTP POPUP (đăng ký) ── */
+function showOtpPopup() { document.getElementById('otpModal').classList.add('open'); }
+function closeOtpPopup() { document.getElementById('otpModal').classList.remove('open'); }
+function nextOtpPopup(el, last) {
+  if(el.value.length===1) {
+    if(last) { closeOtpPopup(); goToStep(3); return; }
+    const next = el.nextElementSibling;
+    if(next) next.focus();
+  }
+}
+document.addEventListener('click', e => {
+  if(e.target.id==='otpModal') closeOtpPopup();
+  if(e.target.id==='loginOtpModal') closeLoginOtpPopup();
+  if(e.target.id==='nrxResultModal') closeNrxResult();
+  if(e.target.id==='logoutModal') closeLogout();
+});
+function showNrxResult() {
+  document.getElementById('nrxResultModal').classList.add('open');
+}
+function closeNrxResult() {
+  document.getElementById('nrxResultModal').classList.remove('open');
+}
+document.addEventListener('click', e => {
+  if(e.target.id==='nrxResultModal') closeNrxResult();
+  if(e.target.id==='logoutModal') closeLogout();
+});
+
+/* ── NRX ── */
+const NRX_QS = [
+  { q:'Bạn đang ở giai đoạn nào trong cuộc sống?', group:'Về bạn',
+    opts:[{i:'🎓',t:'20s — Mới đi làm, xây dựng sự nghiệp'},{i:'👨‍👩‍👧',t:'30s — Lập gia đình, có con nhỏ'},{i:'📈',t:'40s — Sự nghiệp đỉnh cao, tích lũy mạnh'},{i:'🌅',t:'50s+ — Chuẩn bị nghỉ hưu / đã nghỉ hưu'}] },
+  { q:'Điều bạn quan tâm nhất hiện tại là gì?', group:'Ưu tiên',
+    opts:[{i:'💪',t:'Sức khỏe — ăn uống, lối sống lành mạnh'},{i:'💰',t:'Tài chính — đầu tư, tích lũy tài sản'},{i:'🛡',t:'Bảo vệ gia đình — bảo hiểm, an toàn'},{i:'🔗',t:'Cả ba — muốn cải thiện toàn diện'}] },
+  { q:'Bạn hiện đang có bảo hiểm sức khỏe chưa?', group:'Bảo vệ',
+    opts:[{i:'✅',t:'Có — bảo hiểm tư nhân đầy đủ'},{i:'🟡',t:'Chỉ có BHYT hoặc bảo hiểm công ty cơ bản'},{i:'❌',t:'Chưa có bảo hiểm nào'},{i:'🤔',t:'Không chắc / chưa kiểm tra'}] },
+  { q:'Bạn đã bắt đầu đầu tư chưa?', group:'Tài chính',
+    opts:[{i:'🌱',t:'Chưa — chỉ gửi tiết kiệm ngân hàng'},{i:'📊',t:'Đang tìm hiểu, chưa hành động'},{i:'💹',t:'Đã đầu tư — cổ phiếu, quỹ, vàng...'},{i:'🏆',t:'Có danh mục đầu tư đa dạng, có chiến lược'}] },
+  { q:'Thói quen ăn uống hiện tại của bạn như thế nào?', group:'Sức khỏe',
+    opts:[{i:'🥗',t:'Rất chú trọng — ăn sạch, thực phẩm tự nhiên'},{i:'🍱',t:'Cố gắng ăn lành mạnh nhưng chưa nhất quán'},{i:'🍔',t:'Tiện đâu ăn đó, chưa chú trọng'},{i:'💊',t:'Đang có vấn đề sức khỏe cần điều chỉnh'}] },
+];
+let nrxCurrent = 0, nrxAnswers = {};
+
+function renderNrx(idx) {
+  const q = NRX_QS[idx];
+  document.getElementById('nrx-qnum').textContent = q.group + ' · Câu ' + (idx+1) + '/5';
+  document.getElementById('nrx-q').textContent = q.q;
+  document.getElementById('nrx-prog').style.width = ((idx+1)/5*100) + '%';
+  document.getElementById('nrx-prog-txt').textContent = 'Câu ' + (idx+1) + ' / 5';
+  const opts = document.getElementById('nrx-opts');
+  opts.innerHTML = '';
+  q.opts.forEach((o,i) => {
+    const btn = document.createElement('button');
+    btn.className = 'nrx-opt' + (nrxAnswers[idx]===i?' selected':'');
+    btn.innerHTML = `<span class="nrx-opt-icon">${o.i}</span><span class="nrx-opt-text">${o.t}</span>`;
+    btn.onclick = () => { nrxAnswers[idx]=i; renderNrx(idx); };
+    opts.appendChild(btn);
+  });
+  document.getElementById('nrx-next').disabled = nrxAnswers[idx]===undefined;
+  document.getElementById('nrx-next').textContent = idx===4 ? 'Xem kết quả →' : 'Tiếp theo →';
+  document.getElementById('nrx-back').style.visibility = idx===0 ? 'hidden' : 'visible';
+  document.getElementById('nrx-skip-banner').classList.remove('show');
+}
+function nrxNext() {
+  if(nrxAnswers[nrxCurrent]===undefined) return;
+  if(nrxCurrent < 4) { nrxCurrent++; renderNrx(nrxCurrent); }
+  else {
+    showNrxResult();
+  }
+}
+function nrxBack() { if(nrxCurrent>0){ nrxCurrent--; renderNrx(nrxCurrent); } }
+function showSkipBanner() { document.getElementById('nrx-skip-banner').classList.add('show'); }
+function hideSkipBanner() { document.getElementById('nrx-skip-banner').classList.remove('show'); }
+
+/* ── DASHBOARD TABS ── */
+function switchTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const panel = document.getElementById('tab-'+id);
+  if(panel) panel.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if(n.getAttribute('onclick')&&n.getAttribute('onclick').includes("'"+id+"'")) n.classList.add('active');
+  });
+}
+
+/* ── LOGOUT ── */
+function showLogoutModal() { document.getElementById('logoutModal').classList.add('open'); }
+function closeLogout() { document.getElementById('logoutModal').classList.remove('open'); }
+function doLogout() { closeLogout(); goTo('onboard'); goToStep(1); }
+
+/* ── CHAT ── */
+function sendMsg(chip) {
+  const text = chip.textContent;
+  addUserMsg(text);
+  setTimeout(()=>addCaMsg('Thư đã nhận câu hỏi của Bạn. Thư sẽ phản hồi chi tiết trong ít phút nhé!'),800);
+}
+function sendChatMsg() {
+  const input = document.getElementById('chat-input');
+  if(!input.value.trim()) return;
+  addUserMsg(input.value);
+  input.value = '';
+  setTimeout(()=>addCaMsg('Thư đã nhận! Bạn có thể đặt lịch hẹn để Thư tư vấn chi tiết hơn nhé.'),800);
+}
+function addUserMsg(text) {
+  const msgs = document.getElementById('chat-msgs');
+  msgs.innerHTML += `<div class="chat-msg-wrap user"><div class="chat-msg-av user">AT</div><div class="chat-bubble user">${text}</div></div>`;
+  msgs.scrollTop = msgs.scrollHeight;
+}
+function addCaMsg(text) {
+  const msgs = document.getElementById('chat-msgs');
+  msgs.innerHTML += `<div class="chat-msg-wrap"><div class="chat-msg-av">HT</div><div class="chat-bubble ca">${text}</div></div>`;
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+/* ── MISC ── */
+function toggleMission(el) { el.querySelector('.mission-check').classList.toggle('done'); }
+function saveProfile() {
+  alert('✅ Đã lưu thông tin!\nHồ sơ của bạn đã được cập nhật.');
+  document.getElementById('profile-pct').textContent='80%';
+  document.getElementById('profile-bar').style.width='80%';
+}
+function submitCA() { alert('✅ Đã gửi đơn đăng ký CA!\nĐội ngũ IPA Living sẽ liên hệ bạn trong 24-48 giờ.'); }
+
+
+/* ── WORKSHOP DATA ── */
+const WS_DATA = {
+  ws1: {
+    pillar:'Sống Khỏe', format:'Offline', price:'Miễn phí',
+    title:'Bếp nhà Homefood / Trà chuyện Tôi Là Thảo Mộc',
+    date:'📅 15/06/2026 · 19:00–21:00', location:'📍 Dstation Hoàn Kiếm',
+    speaker:'👤 BS. Nguyễn Hoài An', speakerAv:'HA', speakerName:'BS. Nguyễn Hoài An', speakerRole:'Chuyên gia dinh dưỡng · Gobio',
+    modalSub:'Bếp nhà Homefood · 15/06/2026 · Dstation Hoàn Kiếm'
+  },
+  ws2: {
+    pillar:'Sống Giàu', format:'Online', price:'Miễn phí',
+    title:'DGO Life – Nếp sống đầu tư bền vững',
+    date:'📅 20/06/2026 · 19:30–21:00', location:'🌐 Zoom D-ONE',
+    speaker:'👤 Chuyên gia Lâm Luyện', speakerAv:'LL', speakerName:'Ông Lâm Luyện', speakerRole:'Chuyên gia đầu tư · VNDGO',
+    modalSub:'DGO Life · 20/06/2026 · Zoom D-ONE'
+  }
+};
+
+function openWsDetail(key) {
+  const d = WS_DATA[key] || WS_DATA.ws1;
+  document.getElementById('wsd-pillar').textContent = d.pillar;
+  document.getElementById('wsd-format').textContent = d.format;
+  document.getElementById('wsd-title').textContent = d.title;
+  document.getElementById('wsd-date').textContent = d.date;
+  document.getElementById('wsd-location').textContent = d.location;
+  document.getElementById('wsd-speaker').textContent = d.speaker;
+  document.getElementById('wsd-price').textContent = d.price;
+  document.getElementById('wsd-speaker-av').textContent = d.speakerAv;
+  document.getElementById('wsd-speaker-name').textContent = d.speakerName;
+  document.getElementById('wsd-speaker-role').textContent = d.speakerRole;
+  document.getElementById('wsm-title').textContent = 'Đăng ký: ' + d.title.substring(0,40) + '…';
+  document.getElementById('wsm-sub').textContent = d.modalSub;
+  switchTab('ws-detail');
+}
+
+function openWsRegModal() {
+  document.getElementById('ws-reg-modal').classList.add('open');
+}
+function closeWsRegModal() {
+  document.getElementById('ws-reg-modal').classList.remove('open');
+}
+function submitWsReg() {
+  const name = document.getElementById('wsm-name').value.trim();
+  if(!name){ alert('Vui lòng nhập họ tên.'); return; }
+  closeWsRegModal();
+  const toast = document.getElementById('ws-toast');
+  toast.classList.add('show');
+  setTimeout(()=> toast.classList.remove('show'), 3500);
+}
+
+/* ── LỊCH DETAIL DATA ── */
+const LICH_DATA = {
+  ws1: {
+    type: 'workshop',
+    tags: '<span class="lich-tag ws">Workshop</span><span class="lich-tag confirmed">Đã xác nhận</span>',
+    heroBg: 'var(--forest)',
+    title: 'Bếp nhà Homefood / Trà chuyện Tôi Là Thảo Mộc',
+    date: '📅 15/06/2026 · 19:00 – 21:00',
+    loc: '📍 Dstation Hoàn Kiếm · 12 Tràng Tiền, Hà Nội',
+    speaker: '👤 BS. Nguyễn Hoài An · Chuyên gia dinh dưỡng Gobio',
+    takeaways: [
+      'Hiểu triết lý thân thổ bất nhị — lý do ăn đúng vùng đất mình sống',
+      'Nguyên tắc NAO — Natural, Authentic, Original khi chọn thực phẩm',
+      'Xây thói quen ăn uống 21 ngày — không cần willpower, chỉ cần hệ thống',
+      'Thực hành nấu 1 món gobio cơ bản ngay tại workshop'
+    ],
+    agenda: [
+      {time:'19:00', title:'Khai mạc & Giới thiệu không gian gobio', desc:'Thưởng trà Vietcharm, làm quen cộng đồng', color:'var(--amber)'},
+      {time:'19:20', title:'Triết lý thân thổ bất nhị', desc:'BS. Nguyễn Hoài An trình bày · 40 phút', color:'var(--amber)'},
+      {time:'20:00', title:'Thực hành nấu gobio', desc:'Nấu cơm lứt + canh rau củ đơn giản · 45 phút', color:'var(--amber)'},
+      {time:'20:45', title:'Ăn cùng nhau & Q&A', desc:'Thưởng thức bữa ăn vừa nấu, hỏi đáp tự do', color:'var(--amber)'},
+      {time:'21:15', title:'Networking & Kết nối cộng đồng', desc:'Tự do giao lưu, kết thúc lúc 21:30', color:'var(--green)'}
+    ],
+    actionIcon: '📍', actionTitle: 'Dstation Hoàn Kiếm', actionSub: '12 Tràng Tiền, Hoàn Kiếm, Hà Nội', actionBtn: 'Xem bản đồ →',
+    note: 'Vui lòng có mặt trước 10 phút. Mang theo tạp dề nếu có. Workshop bắt đầu đúng giờ.'
+  },
+  ca1: {
+    type: 'ca',
+    tags: '<span class="lich-tag ca">Hẹn CA 1-1</span><span class="lich-tag" style="background:rgba(196,129,58,.1);color:var(--amber)">Đang xử lý</span>',
+    heroBg: '#3D5A47',
+    title: 'Tư vấn lộ trình DSIP cùng Hoài Thư',
+    date: '📅 20/06/2026 · 14:30 – 15:00',
+    loc: '🌐 Zoom D-ONE · Link gửi qua email',
+    speaker: '👤 Bà Võ Thị Hoài Thư · Client Advisor',
+    takeaways: [
+      'Phân tích điểm NRX Sống Giàu (40%) — nhận diện khoảng trống tài chính',
+      'Đề xuất gói DSIP phù hợp với thu nhập và mục tiêu dài hạn của bạn',
+      'Lộ trình đầu tư 12 tháng đầu — từng bước cụ thể',
+      'Giải đáp các câu hỏi về VNDGO và chứng chỉ quỹ'
+    ],
+    agenda: [
+      {time:'14:30', title:'Check-in & Icebreak', desc:'Vào phòng Zoom, xác nhận thông tin', color:'var(--amber)'},
+      {time:'14:35', title:'Review kết quả NRX', desc:'Hoài Thư phân tích điểm Sống Giàu của bạn', color:'var(--amber)'},
+      {time:'14:45', title:'Đề xuất lộ trình DSIP', desc:'Gói phù hợp, mức tích lũy, timeline', color:'var(--amber)'},
+      {time:'14:55', title:'Q&A tự do', desc:'Hỏi bất cứ điều gì về tài chính cá nhân', color:'var(--green)'}
+    ],
+    actionIcon: '🌐', actionTitle: 'Phòng Zoom D-ONE', actionSub: 'Link gửi qua email trước 15 phút', actionBtn: 'Vào phòng Zoom →',
+    note: 'Chuẩn bị sẵn thông tin thu nhập hàng tháng và mục tiêu tài chính dài hạn để buổi tư vấn hiệu quả hơn.'
+  }
+};
+let _currentLich = null;
+
+function openLichDetail(key) {
+  const d = LICH_DATA[key];
+  if(!d) return;
+  _currentLich = key;
+
+  // Hero
+  document.getElementById('ld-tags').innerHTML = d.tags;
+  document.getElementById('ld-hero').style.background = d.heroBg;
+  document.getElementById('ld-title').textContent = d.title;
+  document.getElementById('ld-date').textContent = d.date;
+  document.getElementById('ld-loc').textContent = d.loc;
+  document.getElementById('ld-speaker').textContent = d.speaker;
+
+  // Takeaways
+  document.getElementById('ld-takeaways').innerHTML = d.takeaways.map(t =>
+    `<div class="ws-detail-takeaway"><span>✓</span><span>${t}</span></div>`
+  ).join('');
+
+  // Agenda
+  document.getElementById('ld-agenda').innerHTML = d.agenda.map(a =>
+    `<div class="ws-agenda-item">
+      <div class="ws-agenda-time" style="color:${a.color}">${a.time}</div>
+      <div><div class="ws-agenda-title">${a.title}</div><div class="ws-agenda-desc">${a.desc}</div></div>
+    </div>`
+  ).join('');
+
+  // Sidebar
+  document.getElementById('ld-action-icon').textContent = d.actionIcon;
+  document.getElementById('ld-action-title').textContent = d.actionTitle;
+  document.getElementById('ld-action-sub').textContent = d.actionSub;
+  document.getElementById('ld-action-btn').textContent = d.actionBtn;
+  document.getElementById('ld-note').textContent = d.note;
+
+  switchTab('lich-detail');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function cancelLichPage() {
+  if(confirm('Bạn chắc chắn muốn hủy lịch này không?')) {
+    // Fade item trong list
+    document.querySelectorAll('.lich-item').forEach(el => {
+      if(el.getAttribute('onclick') && el.getAttribute('onclick').includes("'"+_currentLich+"'"))
+        el.style.opacity = '.35';
+    });
+    switchTab('lich');
+  }
+}
+
+/* ── GẮN onclick cho event-register buttons ── */
+document.addEventListener('DOMContentLoaded', () => {
+  const evtBtns = document.querySelectorAll('.event-register');
+  const keys = ['ws1','ws2'];
+  evtBtns.forEach((btn, i) => {
+    btn.onclick = (e) => { e.stopPropagation(); openWsDetail(keys[i] || 'ws1'); };
+  });
+  // Click event-item cũng mở detail
+  const evtItems = document.querySelectorAll('.event-item');
+  evtItems.forEach((item, i) => {
+    item.style.cursor = 'pointer';
+    item.onclick = () => openWsDetail(keys[i] || 'ws1');
+  });
+});
+
+
+/* ══════════════════════════════════════════
+   NRX FULL — 12 câu, 3 nhóm
+══════════════════════════════════════════ */
+const NRXF_QS = [
+  /* ── NHÓM A: SỐNG KHỎE (4 câu) ── */
+  { group:'Sống Khỏe', groupIdx:0, label:'🌿 Sống Khỏe · Câu 1/4', type:'single', weight:{khoe:true},
+    q:'Bạn ăn rau xanh và trái cây mỗi ngày như thế nào?',
+    opts:[
+      {i:'🥗',t:'Mỗi bữa đều có rau và trái cây tươi',score:{khoe:25}},
+      {i:'🍱',t:'Hầu hết các bữa, thỉnh thoảng bỏ qua',score:{khoe:18}},
+      {i:'🍔',t:'Vài lần một tuần',score:{khoe:10}},
+      {i:'😅',t:'Hiếm khi, gần như không ăn',score:{khoe:3}}
+    ]
+  },
+  { group:'Sống Khỏe', groupIdx:0, label:'🌿 Sống Khỏe · Câu 2/4', type:'single', weight:{khoe:true},
+    q:'Bạn ngủ trung bình bao nhiêu tiếng mỗi đêm?',
+    opts:[
+      {i:'😴',t:'7–9 tiếng — ngủ đủ và chất lượng',score:{khoe:25}},
+      {i:'🌙',t:'6–7 tiếng — tạm ổn',score:{khoe:15}},
+      {i:'⏰',t:'Dưới 6 tiếng — thiếu ngủ thường xuyên',score:{khoe:7}},
+      {i:'🔄',t:'Giờ giấc không cố định, đảo lộn',score:{khoe:4}}
+    ]
+  },
+  { group:'Sống Khỏe', groupIdx:0, label:'🌿 Sống Khỏe · Câu 3/4', type:'single', weight:{khoe:true},
+    q:'Mức độ vận động thể chất của bạn mỗi tuần?',
+    opts:[
+      {i:'🏃',t:'4–7 ngày/tuần — vận động đều đặn',score:{khoe:25}},
+      {i:'🚶',t:'2–3 ngày/tuần',score:{khoe:16}},
+      {i:'🛋️',t:'Thỉnh thoảng, không có lịch cố định',score:{khoe:8}},
+      {i:'💻',t:'Gần như không vận động',score:{khoe:3}}
+    ]
+  },
+  { group:'Sống Khỏe', groupIdx:0, label:'🌿 Sống Khỏe · Câu 4/4', type:'multi', weight:{khoe:true},
+    q:'Bạn đang gặp vấn đề sức khỏe nào? (Chọn tất cả phù hợp)',
+    opts:[
+      {i:'😴',t:'Mệt mỏi, thiếu năng lượng',score:{khoe:-8}},
+      {i:'😰',t:'Căng thẳng, stress thường xuyên',score:{khoe:-6}},
+      {i:'⚖️',t:'Cân nặng chưa lý tưởng',score:{khoe:-5}},
+      {i:'✅',t:'Không có vấn đề gì đáng kể',score:{khoe:25}}
+    ]
+  },
+
+  /* ── NHÓM B: SỐNG GIÀU (4 câu) ── */
+  { group:'Sống Giàu', groupIdx:1, label:'💰 Sống Giàu · Câu 1/4', type:'single', weight:{giau:true},
+    q:'Bạn đang tiết kiệm hoặc đầu tư bao nhiêu % thu nhập hàng tháng?',
+    opts:[
+      {i:'🏆',t:'Trên 30% — kỷ luật tài chính cao',score:{giau:25}},
+      {i:'💪',t:'15–30%',score:{giau:18}},
+      {i:'🌱',t:'Dưới 15% — vẫn đang xây thói quen',score:{giau:10}},
+      {i:'😅',t:'Gần như không tiết kiệm được',score:{giau:3}}
+    ]
+  },
+  { group:'Sống Giàu', groupIdx:1, label:'💰 Sống Giàu · Câu 2/4', type:'single', weight:{giau:true},
+    q:'Mục tiêu tài chính lớn nhất của bạn trong 5 năm tới?',
+    opts:[
+      {i:'🏠',t:'Mua nhà / bất động sản',score:{giau:20}},
+      {i:'📈',t:'Tích lũy quỹ đầu tư 500 triệu+',score:{giau:22}},
+      {i:'👶',t:'Quỹ giáo dục cho con',score:{giau:18}},
+      {i:'🌴',t:'Tự do tài chính / nghỉ hưu sớm',score:{giau:25}}
+    ]
+  },
+  { group:'Sống Giàu', groupIdx:1, label:'💰 Sống Giàu · Câu 3/4', type:'single', weight:{giau:true},
+    q:'Mức độ chấp nhận rủi ro khi đầu tư của bạn?',
+    opts:[
+      {i:'🛡',t:'Thấp — ưu tiên an toàn, lãi ổn định',score:{giau:10}},
+      {i:'⚖️',t:'Trung bình — chấp nhận rủi ro vừa phải',score:{giau:18}},
+      {i:'📈',t:'Cao — sẵn sàng rủi ro để lãi cao hơn',score:{giau:22}},
+      {i:'🚀',t:'Rất cao — đầu tư tích cực, chấp nhận biến động',score:{giau:20}}
+    ]
+  },
+  { group:'Sống Giàu', groupIdx:1, label:'💰 Sống Giàu · Câu 4/4', type:'single', weight:{giau:true},
+    q:'Nếu mất việc làm đột ngột, quỹ dự phòng của bạn đủ dùng bao lâu?',
+    opts:[
+      {i:'✅',t:'Trên 6 tháng — quỹ dự phòng vững',score:{giau:25}},
+      {i:'📅',t:'3–6 tháng',score:{giau:17}},
+      {i:'⚡',t:'Dưới 3 tháng',score:{giau:8}},
+      {i:'😰',t:'Gần như không có',score:{giau:2}}
+    ]
+  },
+
+  /* ── NHÓM C: SỐNG AN (4 câu) ── */
+  { group:'Sống An', groupIdx:2, label:'🛡 Sống An · Câu 1/4', type:'multi', weight:{an:true},
+    q:'Bạn hiện đang có những loại bảo hiểm nào? (Chọn tất cả phù hợp)',
+    opts:[
+      {i:'🏥',t:'Bảo hiểm sức khỏe tư nhân (PTI, Bảo Việt...)',score:{an:20}},
+      {i:'👔',t:'Bảo hiểm nhân thọ',score:{an:22}},
+      {i:'🚗',t:'Bảo hiểm tai nạn / xe cộ',score:{an:10}},
+      {i:'❌',t:'Chỉ có BHYT hoặc chưa có gì',score:{an:2}}
+    ]
+  },
+  { group:'Sống An', groupIdx:2, label:'🛡 Sống An · Câu 2/4', type:'single', weight:{an:true},
+    q:'Có bao nhiêu người phụ thuộc vào thu nhập của bạn?',
+    opts:[
+      {i:'1️⃣',t:'Chỉ mình tôi',score:{an:20}},
+      {i:'👫',t:'1–2 người (vợ/chồng, con nhỏ)',score:{an:15}},
+      {i:'👨‍👩‍👧‍👦',t:'3–4 người',score:{an:10}},
+      {i:'🏘️',t:'5 người trở lên',score:{an:6}}
+    ]
+  },
+  { group:'Sống An', groupIdx:2, label:'🛡 Sống An · Câu 3/4', type:'single', weight:{an:true},
+    q:'Nếu bạn không thể làm việc trong 6 tháng vì bệnh, gia đình có ổn không?',
+    opts:[
+      {i:'✅',t:'Hoàn toàn ổn — đã có kế hoạch dự phòng',score:{an:25}},
+      {i:'🤔',t:'Tạm ổn nhưng phải thắt chặt chi tiêu',score:{an:15}},
+      {i:'😟',t:'Khó khăn — chưa có kế hoạch rõ ràng',score:{an:7}},
+      {i:'😰',t:'Rất khó khăn — không có dự phòng',score:{an:2}}
+    ]
+  },
+  { group:'Sống An', groupIdx:2, label:'🛡 Sống An · Câu 4/4', type:'single', weight:{an:true},
+    q:'Mối lo lớn nhất về bảo vệ gia đình của bạn hiện tại?',
+    opts:[
+      {i:'🏥',t:'Chi phí y tế khi ốm đau nặng',score:{an:20}},
+      {i:'💸',t:'Mất thu nhập đột ngột',score:{an:18}},
+      {i:'👨‍👩‍👦',t:'Tương lai tài chính con cái',score:{an:22}},
+      {i:'✅',t:'Đã có kế hoạch bảo vệ toàn diện',score:{an:25}}
+    ]
+  }
+];
+
+let nrxfCurrent = 0;
+let nrxfAnswers = {}; // {qIdx: [optIdx, ...]}
+let nrxfDone = false;
+
+let nrxfGroupFilter = null; // null = tất cả, 0/1/2 = nhóm cụ thể
+let nrxfGroupQuestions = []; // câu hỏi được filter
+
+const GROUP_META = [
+  {key:'khoe', label:'Sống Khỏe', icon:'🌿', color:'var(--green)', sub:'Ăn uống, giấc ngủ, vận động'},
+  {key:'giau', label:'Sống Giàu', icon:'💰', color:'var(--amber)', sub:'Tiết kiệm, đầu tư, mục tiêu tài chính'},
+  {key:'an',   label:'Sống An',   icon:'🛡', color:'#6B9AB8',     sub:'Bảo hiểm, bảo vệ gia đình'}
+];
+
+function startNrxGroup(groupIdx) {
+  nrxfGroupFilter = groupIdx;
+  nrxfGroupQuestions = NRXF_QS.filter(q => q.groupIdx === groupIdx);
+  nrxfCurrent = 0;
+  nrxfAnswers = {};
+  nrxfDone = false;
+
+  const meta = GROUP_META[groupIdx];
+  document.getElementById('nrxf-hero-eyebrow').textContent = 'Khảo sát · ' + meta.label;
+  document.getElementById('nrxf-hero-title').textContent = meta.icon + ' ' + meta.label;
+  document.getElementById('nrxf-hero-sub').textContent = meta.sub + ' · 4 câu hỏi · ~2 phút';
+  document.getElementById('nrxf-group-hero').style.background = meta.color === 'var(--green)' ? 'var(--forest)' : meta.color === '#6B9AB8' ? '#3D5A6E' : '#7A5020';
+
+  document.getElementById('nrxf-result-screen').style.display = 'none';
+  document.getElementById('nrxf-card').style.display = '';
+  document.querySelector('.nrxf-nav').style.display = '';
+  document.querySelector('.nrxf-prog-wrap').style.display = '';
+  document.getElementById('nrxf-tabs-wrap').style.display = 'none';
+  goTo('nrx-full');
+  renderNrxf(0);
+}
+
+function startNrxFull() {
+  startNrxGroup(0); // fallback nếu gọi từ chỗ khác
+}
+
+function renderNrxf(idx) {
+  const questions = nrxfGroupQuestions.length ? nrxfGroupQuestions : NRXF_QS;
+  const q = questions[idx];
+  const total = questions.length;
+
+  // Progress
+  document.getElementById('nrxf-prog').style.width = ((idx+1)/total*100) + '%';
+  document.getElementById('nrxf-count').textContent = 'Câu ' + (idx+1) + ' / ' + total;
+  document.getElementById('nrxf-group-label').textContent = q.group;
+
+  // Question
+  document.getElementById('nrxf-qlabel').textContent = q.label;
+  document.getElementById('nrxf-q').textContent = q.q;
+
+  const isMulti = q.type === 'multi';
+  document.getElementById('nrxf-multi-note').style.display = isMulti ? '' : 'none';
+
+  // Options
+  const optsEl = document.getElementById('nrxf-opts');
+  optsEl.innerHTML = '';
+  const selected = nrxfAnswers[idx] || [];
+
+  q.opts.forEach((o, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'nrxf-opt' + (selected.includes(i) ? ' selected' : '');
+    btn.innerHTML = `<span class="nrxf-opt-icon">${o.i}</span><span class="nrxf-opt-text">${o.t}</span><span class="nrxf-opt-check">✓</span>`;
+    btn.onclick = () => {
+      if(isMulti) {
+        const arr = nrxfAnswers[idx] || [];
+        const pos = arr.indexOf(i);
+        // Nếu chọn "Không có" thì bỏ hết, và ngược lại
+        if(i === 3 && q.opts[3].t.startsWith('Chỉ có') || q.opts[i].score && Object.values(q.opts[i].score)[0] > 15) {
+          nrxfAnswers[idx] = [i];
+        } else {
+          if(pos>-1) arr.splice(pos,1); else arr.push(i);
+          // Nếu có lựa chọn khác thì bỏ option "Không có / Tốt"
+          const goodOpt = q.opts.findIndex(oo=>oo.score && Object.values(oo.score)[0] >= 20);
+          if(arr.length>1) { const gi2 = arr.indexOf(goodOpt); if(gi2>-1) arr.splice(gi2,1); }
+          nrxfAnswers[idx] = arr.length ? arr : undefined;
+        }
+      } else {
+        nrxfAnswers[idx] = [i];
+      }
+      renderNrxf(idx);
+    };
+    optsEl.appendChild(btn);
+  });
+
+  // Nav buttons
+  document.getElementById('nrxf-back').style.visibility = idx===0 ? 'hidden' : 'visible';
+  const hasAnswer = nrxfAnswers[idx] && nrxfAnswers[idx].length > 0;
+  document.getElementById('nrxf-next').disabled = !hasAnswer;
+  document.getElementById('nrxf-next').textContent = idx===total-1 ? 'Xem kết quả →' : 'Tiếp theo →';
+}
+
+function nrxfNext() {
+  const questions = nrxfGroupQuestions.length ? nrxfGroupQuestions : NRXF_QS;
+  if(!nrxfAnswers[nrxfCurrent] || !nrxfAnswers[nrxfCurrent].length) return;
+  if(nrxfCurrent < questions.length-1) {
+    nrxfCurrent++;
+    renderNrxf(nrxfCurrent);
+    window.scrollTo({top:0, behavior:'smooth'});
+  } else {
+    showNrxfResult();
+  }
+}
+
+function nrxfBack() {
+  if(nrxfCurrent > 0) { nrxfCurrent--; renderNrxf(nrxfCurrent); }
+}
+
+function skipNrxFull() {
+  switchTab('lo-trinh');
+  goTo('dashboard');
+}
+
+function calcNrxfScores() {
+  const questions = nrxfGroupQuestions.length ? nrxfGroupQuestions : NRXF_QS;
+  let khoe=0, giau=0, an=0;
+  questions.forEach((q,qi) => {
+    const sel = nrxfAnswers[qi] || [];
+    sel.forEach(si => {
+      const s = q.opts[si].score || {};
+      khoe += s.khoe || 0;
+      giau += s.giau || 0;
+      an += s.an || 0;
+    });
+  });
+  const maxKhoe = 75, maxGiau = 97, maxAn = 77;
+  return {
+    khoe: Math.min(100, Math.max(0, Math.round(khoe/maxKhoe*100))),
+    giau: Math.min(100, Math.max(0, Math.round(giau/maxGiau*100))),
+    an:   Math.min(100, Math.max(0, Math.round(an/maxAn*100)))
+  };
+}
+
+function scoreStatus(n) {
+  if(n>=75) return ['Rất tốt','#16A34A','#DCFCE7'];
+  if(n>=55) return ['Duy trì tốt','#16A34A','#DCFCE7'];
+  if(n>=35) return ['Cần chú ý','#D97706','#FEF3C7'];
+  return ['Cần cải thiện','#DC2626','#FEE2E2'];
+}
+
+function showNrxfResult() {
+  nrxfDone = true;
+  const sc = calcNrxfScores();
+
+  // Lưu vào global để dashboard dùng
+  window._nrxfScores = sc;
+
+  // Hiện result screen
+  document.getElementById('nrxf-card').style.display = 'none';
+  document.querySelector('.nrxf-nav').style.display = 'none';
+  document.querySelector('.nrxf-prog-wrap').style.display = 'none';
+  document.getElementById('nrxf-result-screen').style.display = '';
+
+  // Chỉ hiện score của nhóm đang làm
+  const groupKeys = nrxfGroupFilter !== null
+    ? [['khoe','giau','an'][nrxfGroupFilter]]
+    : ['khoe','giau','an'];
+
+  document.querySelectorAll('.nrxf-score-card').forEach((el,i) => {
+    const k = ['khoe','giau','an'][i];
+    if(groupKeys.includes(k)) {
+      el.style.opacity = '1';
+      const n = sc[k];
+      const [label,color,bg] = scoreStatus(n);
+      document.getElementById('nrxf-score-'+k).textContent = n;
+      const st = document.getElementById('nrxf-status-'+k);
+      st.textContent = label;
+      st.style.background = bg;
+      st.style.color = color;
+    } else {
+      el.style.opacity = '0.25';
+      document.getElementById('nrxf-score-'+k).textContent = '–';
+      document.getElementById('nrxf-status-'+k).textContent = 'Chưa làm';
+    }
+  });
+
+  // Insight theo nhóm đang làm
+  const insightMap = {
+    khoe: [
+      [75, '🎉 Nếp sống khỏe của bạn rất tốt! Tiếp tục duy trì và thêm thực phẩm gobio để tối ưu hóa.'],
+      [50, '🌿 Bạn đang đi đúng hướng. Cải thiện giấc ngủ và bổ sung thực phẩm tự nhiên sẽ tạo ra sự khác biệt lớn.'],
+      [0,  '🌱 Bắt đầu từ những thay đổi nhỏ — 1 bữa gobio mỗi ngày, 10 phút đi bộ. D-ONE sẽ hỗ trợ bạn từng bước.']
+    ],
+    giau: [
+      [75, '🏆 Nền tảng tài chính của bạn vững! CA Hoài Thư có thể giúp tối ưu danh mục DSIP để tăng trưởng tốt hơn.'],
+      [45, '💰 Bạn đã có ý thức tốt về tài chính. Thêm kỷ luật đầu tư định kỳ DSIP sẽ giúp bạn đạt mục tiêu nhanh hơn.'],
+      [0,  '📈 Chưa muộn để bắt đầu. DSIP từ 300k/tháng là điểm khởi đầu hoàn hảo — CA Hoài Thư sẽ đồng hành cùng bạn.']
+    ],
+    an: [
+      [75, '🛡 Gia đình bạn đang được bảo vệ tốt! Kiểm tra lại định kỳ với CA để đảm bảo luôn phủ đủ.'],
+      [45, '⚖️ Mức bảo vệ hiện tại tạm ổn nhưng còn khoảng trống. PTIcare sắp ra mắt các gói phù hợp cho bạn.'],
+      [0,  '⚠️ Gia đình bạn đang thiếu lưới bảo vệ tài chính. Đặt lịch với CA Hoài Thư để được tư vấn miễn phí ngay.']
+    ]
+  };
+  const gKey = nrxfGroupFilter !== null ? ['khoe','giau','an'][nrxfGroupFilter] : 'khoe';
+  const gScore = sc[gKey] || 0;
+  const levels = insightMap[gKey];
+  const insightText = (levels.find(([min]) => gScore >= min) || levels[levels.length-1])[1];
+  document.getElementById('nrxf-insight').textContent = insightText;
+
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function finishNrxFull() {
+  const sc = window._nrxfScores || {};
+  const groupKeys = ['khoe','giau','an'];
+
+  if(nrxfGroupFilter !== null) {
+    const k = groupKeys[nrxfGroupFilter];
+    const score = sc[k] || 0;
+    // Ẩn banner, hiện header + progress của nhánh này
+    const bannerEl = document.getElementById('lt-banner-'+k);
+    if(bannerEl) bannerEl.style.display = 'none';
+    const headerEl = document.getElementById('lt-header-'+k);
+    if(headerEl) headerEl.style.display = '';
+    // Update score text
+    const scoreEl = document.getElementById('lt-score-'+k);
+    if(scoreEl) scoreEl.textContent = score;
+    // Update bar
+    const barEl = document.getElementById('lt-bar-'+k);
+    const barColors = {khoe:'var(--green)', giau:'var(--amber)', an:'#6B9AB8'};
+    if(barEl) { barEl.style.width = score+'%'; barEl.style.background = barColors[k]; }
+    // Update overview score cards nếu có
+    const ovEl = document.getElementById('score-'+k);
+    if(ovEl) ovEl.textContent = score;
+  }
+
+  // Về lộ trình
+  switchTab('lo-trinh');
+  goTo('dashboard');
+}
+
+function updateDashboardScores(sc) {
+  // Cập nhật 3 score cards trên Overview
+  const cards = [
+    {id:'score-khoe', val:sc.khoe},
+    {id:'score-giau', val:sc.giau},
+    {id:'score-an',   val:sc.an}
+  ];
+  cards.forEach(c => {
+    const el = document.getElementById(c.id);
+    if(el) el.textContent = c.val;
+  });
+  // Cập nhật progress bars nếu có
+  ['khoe','giau','an'].forEach(k => {
+    const bar = document.getElementById('bar-'+k);
+    if(bar) bar.style.width = sc[k] + '%';
+  });
+}
+
+// Init
+renderNrx(0);
+</script>
+
+<!-- MODAL ĐĂNG KÝ WORKSHOP -->
+<div id="ws-reg-modal">
+  <div class="ws-reg-modal-box">
+    <div class="ws-reg-modal-head">
+      <div class="ws-reg-modal-title" id="wsm-title">Đăng ký Workshop</div>
+      <div class="ws-reg-modal-sub" id="wsm-sub">Bếp nhà Homefood · 15/06/2026 · Dstation Hoàn Kiếm</div>
+    </div>
+    <div class="ws-reg-modal-body">
+      <div class="ws-reg-form-row">
+        <label class="ws-reg-form-label">Họ và tên *</label>
+        <input class="ws-reg-form-input" id="wsm-name" placeholder="Nguyễn Anh Tuấn" value="Nguyễn Anh Tuấn">
+      </div>
+      <div class="ws-reg-form-row">
+        <label class="ws-reg-form-label">Số điện thoại *</label>
+        <input class="ws-reg-form-input" id="wsm-phone" placeholder="090 xxx xxxx" value="090 334 xxxx">
+      </div>
+      <div class="ws-reg-form-row">
+        <label class="ws-reg-form-label">Email</label>
+        <input class="ws-reg-form-input" id="wsm-email" placeholder="email@gmail.com" value="tuanna@gmail.com">
+      </div>
+      <div class="ws-reg-form-row" style="margin-bottom:0">
+        <label class="ws-reg-form-label">Ghi chú (không bắt buộc)</label>
+        <input class="ws-reg-form-input" id="wsm-note" placeholder="Bạn muốn hỏi thêm điều gì...">
+      </div>
+    </div>
+    <div class="ws-reg-modal-footer">
+      <button style="flex:1;padding:12px;border-radius:var(--r-md);border:1.5px solid var(--border);background:white;color:var(--ink-soft);font-size:13px;cursor:pointer" onclick="closeWsRegModal()">Hủy</button>
+      <button class="btn-amber" style="flex:2;padding:12px;border-radius:var(--r-md);font-size:13px" onclick="submitWsReg()">✅ Xác nhận đăng ký</button>
+    </div>
+  </div>
+</div>
+<!-- TOAST -->
+<div id="ws-toast">✅ Đăng ký thành công! Chúng tôi sẽ nhắc bạn trước 1 ngày.</div>
+
+
+</body>
+</html>
